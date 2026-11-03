@@ -26,6 +26,7 @@ const flags = {
 };
 
 let inputFile = null;
+let customBody = null;
 
 for (let i = 0; i < args.length; i++) {
   const arg = args[i];
@@ -58,6 +59,8 @@ if (inputFile) {
     if (quoteMatch) flags.quote = quoteMatch[1].trim();
     const sourceMatch = yaml.match(/quote_source:\s*["']?([^"'\n]+)["']?/);
     if (sourceMatch) flags.quoteSource = sourceMatch[1].trim();
+    const rest = content.slice(fmMatch[0].length).trim();
+    if (rest) customBody = rest;
   }
 }
 
@@ -66,36 +69,69 @@ if (!existsSync(outDir)) {
   mkdirSync(outDir, { recursive: true });
 }
 
+function escapeXml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function cleanQuote(str) {
+  if (!str) return '';
+  return String(str).trim().replace(/^["“'”]+|["“'”]+$/g, '');
+}
+
 /**
  * Generate Adaptive SVG Banner
  */
-function generateBannerSvg({ name, title, quote, quoteSource }) {
+function generateBannerSvg({ name, title, quote, quoteSource }, theme = 'adaptive') {
   const width = 896;
   const height = 260;
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="${height}">
-  <defs>
-    <style>
-      :root {
+  const lightTokens = `
         --base-surface: #fbf9f6;
         --primary-ink: #2f3542;
         --secondary-ink: #57606f;
         --sole-accent: #537791;
         --subtle-border: rgba(47, 53, 66, 0.16);
         --subtle-fill: rgba(47, 53, 66, 0.04);
-        --stroke-tint: rgba(47, 53, 66, 0.55);
-      }
+        --stroke-tint: rgba(47, 53, 66, 0.75);
+  `;
+
+  const darkTokens = `
+        --base-surface: #16181d;
+        --primary-ink: #e4e7eb;
+        --secondary-ink: #9aa2b1;
+        --sole-accent: #9cb4cd;
+        --subtle-border: rgba(228, 231, 235, 0.16);
+        --subtle-fill: rgba(228, 231, 235, 0.05);
+        --stroke-tint: rgba(228, 231, 235, 0.75);
+  `;
+
+  let styleTokens = '';
+  if (theme === 'light') {
+    styleTokens = `:root { ${lightTokens} }`;
+  } else if (theme === 'dark') {
+    styleTokens = `:root { ${darkTokens} }`;
+  } else {
+    styleTokens = `:root { ${lightTokens} }
       @media (prefers-color-scheme: dark) {
-        :root {
-          --base-surface: #16181d;
-          --primary-ink: #e4e7eb;
-          --secondary-ink: #9aa2b1;
-          --sole-accent: #9cb4cd;
-          --subtle-border: rgba(228, 231, 235, 0.16);
-          --subtle-fill: rgba(228, 231, 235, 0.05);
-          --stroke-tint: rgba(228, 231, 235, 0.55);
-        }
-      }
+        :root { ${darkTokens} }
+      }`;
+  }
+
+  const safeName = escapeXml(name);
+  const safeTitle = escapeXml(title);
+  const safeQuote = escapeXml(cleanQuote(quote));
+  const safeSource = escapeXml(quoteSource);
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <defs>
+    <style>
+      ${styleTokens}
       .card-bg {
         fill: var(--base-surface);
         stroke: var(--subtle-border);
@@ -108,18 +144,18 @@ function generateBannerSvg({ name, title, quote, quoteSource }) {
         opacity: 0.5;
       }
       .hero-title {
-        font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "Georgia", "Times New Roman", serif;
+        font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "SimSun", "Georgia", "Times New Roman", serif;
         font-weight: 700;
-        font-size: 56px;
+        font-size: 54px;
         letter-spacing: 0.12em;
         text-anchor: middle;
         fill: var(--base-surface);
         stroke: var(--stroke-tint);
-        stroke-width: 1.2px;
+        stroke-width: 1.6px;
         paint-order: stroke fill;
       }
       .hero-subtitle {
-        font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", serif;
+        font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "SimSun", serif;
         font-weight: 400;
         font-size: 15px;
         letter-spacing: 0.06em;
@@ -127,7 +163,7 @@ function generateBannerSvg({ name, title, quote, quoteSource }) {
         fill: var(--secondary-ink);
       }
       .epigraph-text {
-        font-family: "Noto Serif SC", "Songti SC", serif;
+        font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
         font-weight: 400;
         font-size: 13px;
         font-style: italic;
@@ -157,32 +193,66 @@ function generateBannerSvg({ name, title, quote, quoteSource }) {
   <circle cx="${width / 2}" cy="28" r="2.5" class="accent-dot" />
 
   <!-- Hollow Hero Title -->
-  <text x="${width / 2}" y="105" class="hero-title">${name}</text>
+  <text x="${width / 2}" y="105" class="hero-title">${safeName}</text>
 
   <!-- Subtitle -->
-  <text x="${width / 2}" y="142" class="hero-subtitle">${title}</text>
+  <text x="${width / 2}" y="142" class="hero-subtitle">${safeTitle}</text>
 
   <!-- Hairline Divider -->
   <line x1="${width / 2 - 120}" y1="172" x2="${width / 2 + 120}" y2="172" class="hairline-divider" />
 
   <!-- Epigraph Quote -->
-  <text x="${width / 2}" y="208" class="epigraph-text">“${quote}”</text>
-  ${quoteSource ? `<text x="${width / 2}" y="228" class="epigraph-text" style="font-size: 11px; font-style: normal; opacity: 0.8;">(${quoteSource})</text>` : ''}
+  <text x="${width / 2}" y="208" class="epigraph-text">“${safeQuote}”</text>
+  ${safeSource ? `<text x="${width / 2}" y="228" class="epigraph-text" style="font-size: 11px; font-style: normal; opacity: 0.8;">— ${safeSource} —</text>` : ''}
 </svg>`;
 }
 
 /**
  * Generate Austere GitHub Profile README.md
  */
-function generateProfileMarkdown({ name, title, quote, quoteSource }) {
-  return `<div align="center">
+function generateProfileMarkdown({ name, title, quote, quoteSource, customBody }) {
+  const safeName = escapeXml(name);
+  const cleanQ = cleanQuote(quote);
 
-![${name} Banner](./banner.svg)
+  if (customBody) {
+    return `<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./banner-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./banner-light.svg">
+  <img alt="${safeName} Banner" src="./banner.svg" width="100%">
+</picture>
 
 </div>
 
-> “${quote}”
-${quoteSource ? `> <cite>(${quoteSource})</cite>\n` : ''}
+> “${cleanQ}”
+${quoteSource ? `> <cite>— ${quoteSource}</cite>\n` : ''}
+---
+
+${customBody}
+
+---
+
+<div align="center">
+
+\`2026 · CHRONICLE TYPOGRAPHIC LABS · SILENCE AND ORDER\`
+
+</div>
+`;
+  }
+
+  return `<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./banner-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./banner-light.svg">
+  <img alt="${safeName} Banner" src="./banner.svg" width="100%">
+</picture>
+
+</div>
+
+> “${cleanQ}”
+${quoteSource ? `> <cite>— ${quoteSource}</cite>\n` : ''}
 ---
 
 ### 01 / ARCHITECTURE & PHILOSOPHY
@@ -222,15 +292,23 @@ ${quoteSource ? `> <cite>(${quoteSource})</cite>\n` : ''}
 }
 
 // Generate files
-const bannerSvg = generateBannerSvg(flags);
-const readmeMd = generateProfileMarkdown(flags);
+const bannerSvg = generateBannerSvg(flags, 'adaptive');
+const bannerLightSvg = generateBannerSvg(flags, 'light');
+const bannerDarkSvg = generateBannerSvg(flags, 'dark');
+const readmeMd = generateProfileMarkdown({ ...flags, customBody });
 
 const bannerPath = resolve(outDir, 'banner.svg');
+const bannerLightPath = resolve(outDir, 'banner-light.svg');
+const bannerDarkPath = resolve(outDir, 'banner-dark.svg');
 const readmePath = resolve(outDir, 'README.md');
 
 writeFileSync(bannerPath, bannerSvg, 'utf-8');
+writeFileSync(bannerLightPath, bannerLightSvg, 'utf-8');
+writeFileSync(bannerDarkPath, bannerDarkSvg, 'utf-8');
 writeFileSync(readmePath, readmeMd, 'utf-8');
 
 console.log(`OK: Chronicle GitHub Profile Generated:`);
-console.log(`  Banner SVG: ${bannerPath}`);
-console.log(`  README:     ${readmePath}`);
+console.log(`  Adaptive Banner: ${bannerPath}`);
+console.log(`  Light Banner:    ${bannerLightPath}`);
+console.log(`  Dark Banner:     ${bannerDarkPath}`);
+console.log(`  README:          ${readmePath}`);

@@ -3,36 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>林简 (Jian Lin) - 简历</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E:root%7B--bg:%23fbf9f6;--st:%233d4451;%7D@media(prefers-color-scheme:dark)%7B:root%7B--bg:%231c1f26;--st:%23d2d6dd;%7D%7D.b%7Bfill:var(--bg);stroke:var(--st);stroke-width:1.2;%7D.t%7Bfont-family:serif;font-weight:700;font-size:34px;text-anchor:middle;fill:var(--bg);stroke:var(--st);stroke-width:1.2px;paint-order:stroke fill;%7D%3C/style%3E%3Ccircle cx='32' cy='32' r='30' class='b'/%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='var(--st)' stroke-width='0.5' opacity='0.25'/%3E%3Ctext x='32' y='44' class='t'%3EC%3C/text%3E%3C/svg%3E">
+  <title>林简 - 简历</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='56' rx='14' fill='%2316181d'/%3E%3Ctext x='32' y='46' font-family='Georgia,serif' font-weight='700' font-size='40' text-anchor='middle' fill='%23fbf9f6'%3EC%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
 /**
  * Chronicle Design System - Resume Stylesheet
- * Strictly adheres to ChronicleDesignSystem.md Section 3:
- * - Base Surface maps to pure white (#ffffff).
- * - Subtle Fill maps to pale gray (#f5f5f5).
- * - Accent color (#82a1b9) remains.
- * - Line-height minimum is 1.7.
- * - Spacious layout strictly preferred over compressed single-page.
- * - No software drop shadows.
+ * Architectural & Editorial Resume Discipline, fused with Kami recruiter-pass standards:
+ * - Chromatic Austerity: Pure white paper (#ffffff), deep carbon ink (#111827), sole accent (#537791).
+ * - Publisher Pressmark Seal: Distinctive classical seal badge in header.
+ * - Executive Metrics Bar: 4-column key metrics anchor (tabular-nums).
+ * - Three-Part Bullet Rows: Fixed Role / Actions / Impact structure with .hl data highlights.
+ * - Career Evolution Arc: 3-step judgment progression timeline.
+ * - Open Source & Artifacts: 2-column grid with Stars/Impact.
+ * - Categorized Skills Matrix: Fixed-width label with crisp tag flow.
+ * - Print Calibrated: Exact A4 proportions (210mm x 297mm), zero orphan sections.
  */
 
 :root {
   --base-surface: #ffffff;
   --primary-ink: #111827;
   --secondary-ink: #4b5563;
+  --muted-ink: #4b5563;
   --sole-accent: #537791;
+  --accent-tint: rgba(83, 119, 145, 0.08);
   --subtle-border: rgba(17, 24, 39, 0.12);
+  --border-dotted: rgba(17, 24, 39, 0.16);
   --subtle-fill: #f3f4f6;
-  --stroke-tint: rgba(17, 24, 39, 0.55);
 
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "Georgia", "Times New Roman", serif;
   --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", SimSun, serif;
 
-  --resume-max-width: 800px;
+  --resume-max-width: 820px;
 }
 
 *, *::before, *::after {
@@ -42,16 +46,17 @@
 }
 
 html {
-  background-color: #f7f7f7;
+  background-color: #fbf9f6;
   color: var(--primary-ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: #f7f7f7;
+  background-color: #fbf9f6;
   min-height: 100vh;
-  padding: 48px 16px;
+  padding: 36px 16px;
 }
 
 /* Resume Document Sheet (A4 Proportion on Screen) */
@@ -59,178 +64,471 @@ body {
   max-width: var(--resume-max-width);
   margin: 0 auto;
   background-color: var(--base-surface);
-  padding: 56px 64px 72px;
+  padding: 44px 52px 48px;
   border: 1px solid var(--subtle-border);
-  box-sizing: border-box;
 }
 
-/* Header */
+/* ==========================================================================
+   1. HEADER & PUBLISHER SEAL
+   ========================================================================== */
 .resume-header {
-  border-bottom: 1px solid var(--subtle-border);
-  padding-bottom: 28px;
-  margin-bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1.2px solid var(--primary-ink);
+  margin-bottom: 18px;
+}
+
+.resume-header-left {
+  flex: 1;
+}
+
+.resume-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 
 .resume-name {
   font-family: var(--font-serif);
+  font-size: 26px;
   font-weight: 700;
-  font-size: 32px;
-  line-height: 1.15;
   color: var(--primary-ink);
-  margin-bottom: 8px;
+  line-height: 1.1;
   letter-spacing: -0.01em;
+}
+
+.resume-alias {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted-ink);
+  letter-spacing: 0.02em;
 }
 
 .resume-headline {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 16px;
-  color: var(--secondary-ink);
-  margin-bottom: 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--sole-accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
 }
 
 .resume-contact {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px 24px;
-  font-size: 13px;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: 12px;
   color: var(--secondary-ink);
 }
 
-.resume-contact span,
+.resume-contact span {
+  display: inline-flex;
+  align-items: center;
+}
+
 .resume-contact a {
   color: var(--secondary-ink);
   text-decoration: none;
+  transition: color 0.15s;
 }
 
 .resume-contact a:hover {
   color: var(--sole-accent);
 }
 
-/* Section Structure */
+.resume-seal {
+  width: 44px;
+  height: 44px;
+  background: var(--primary-ink);
+  color: #fbf9f6;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-left: 20px;
+  user-select: none;
+}
+
+/* ==========================================================================
+   2. EXECUTIVE METRICS BAR
+   ========================================================================== */
+.resume-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background-color: var(--subtle-fill);
+  border: 1px solid var(--subtle-border);
+  border-radius: 3px;
+  padding: 10px 16px;
+  margin-bottom: 20px;
+  break-inside: avoid;
+}
+
+.resume-metrics .metric {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.resume-metrics .metric-value {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--sole-accent);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.resume-metrics .metric-label {
+  font-size: 11.5px;
+  color: var(--secondary-ink);
+  line-height: 1.25;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   3. SECTION STRUCTURE
+   ========================================================================== */
 .resume-section {
-  margin-bottom: 36px;
+  margin-bottom: 20px;
+  break-inside: avoid-page;
 }
 
 .resume-section-title {
   font-family: var(--font-serif);
+  font-size: 15px;
   font-weight: 700;
-  font-size: 18px;
-  line-height: 1.3;
   color: var(--primary-ink);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border-bottom: 1px solid var(--subtle-border);
-  padding-bottom: 8px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.resume-section-title::after {
-  content: "";
-  height: 2px;
-  width: 24px;
-  background-color: var(--sole-accent);
-  display: inline-block;
-}
-
-/* Experience / Project Entry */
-.resume-item {
-  margin-bottom: 24px;
-}
-
-.resume-item-header {
+  border-bottom: 0.8px solid var(--subtle-border);
+  padding-bottom: 4px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 6px;
+  letter-spacing: 0.04em;
 }
 
-.resume-item-role {
-  font-family: var(--font-serif);
+.resume-section-title .sub {
+  font-family: var(--font-body);
+  font-size: 10.5px;
   font-weight: 600;
-  font-size: 16px;
+  color: var(--muted-ink);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   4. CAREER EVOLUTION ARC (TIMELINE)
+   ========================================================================== */
+.resume-timeline {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  break-inside: avoid;
+}
+
+.resume-timeline .tl-step {
+  flex: 1;
+  background-color: var(--subtle-fill);
+  border: 1px solid var(--subtle-border);
+  border-top: 2.5px solid var(--sole-accent);
+  border-radius: 2px;
+  padding: 8px 10px;
+}
+
+.resume-timeline .tl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.resume-timeline .tl-year {
+  font-family: var(--font-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sole-accent);
+}
+
+.resume-timeline .tl-head {
+  font-size: 12px;
+  font-weight: 600;
   color: var(--primary-ink);
 }
 
-.resume-item-company {
-  font-weight: 500;
+.resume-timeline .tl-body {
+  font-size: 11.5px;
   color: var(--secondary-ink);
-  font-size: 14px;
-  margin-left: 8px;
+  line-height: 1.45;
 }
 
-.resume-item-date {
-  font-family: var(--font-body);
-  font-size: 12.5px;
+/* ==========================================================================
+   5. STRUCTURED PROJECT / EXPERIENCE (ROLE / ACTIONS / IMPACT)
+   ========================================================================== */
+.resume-project {
+  margin-bottom: 15px;
+  break-inside: avoid;
+}
+
+.resume-project:last-child {
+  margin-bottom: 4px;
+}
+
+.proj-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.proj-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.proj-name {
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--primary-ink);
+}
+
+.proj-company {
+  font-size: 13.5px;
+  font-weight: 500;
   color: var(--secondary-ink);
-  letter-spacing: 0.03em;
+}
+
+.proj-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  background: var(--accent-tint);
+  padding: 1px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proj-date {
+  font-size: 11.5px;
+  color: var(--muted-ink);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.proj-lines {
+  display: table;
+  width: 100%;
+  margin-top: 3px;
+}
+
+.proj-row {
+  display: table-row;
+}
+
+.proj-label {
+  display: table-cell;
+  width: 13mm;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  letter-spacing: 0.05em;
+  vertical-align: top;
+  padding: 2.5px 0;
+}
+
+.proj-text {
+  display: table-cell;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--primary-ink);
+  line-height: 1.55;
+  padding: 2.5px 0 2.5px 6px;
+}
+
+.hl {
+  color: var(--sole-accent);
+  font-weight: 600;
+}
+
+/* Fallback Standard Bullets */
+.resume-bullets {
+  margin-left: 1.2em;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.resume-bullets li {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--primary-ink);
+  line-height: 1.55;
+  margin-bottom: 3px;
+}
+
+/* ==========================================================================
+   6. OPEN SOURCE & TECHNICAL ARTIFACTS
+   ========================================================================== */
+.os-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 18px;
+  margin-bottom: 8px;
+  break-inside: avoid;
+}
+
+.os-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 0.5px dotted var(--border-dotted);
+  min-width: 0;
+}
+
+.os-name {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.os-name a {
+  color: var(--primary-ink);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.os-name a:hover {
+  color: var(--sole-accent);
+}
+
+.os-desc {
+  font-size: 12px;
+  color: var(--secondary-ink);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Descriptions & Bullets: 400 Regular with cohesive 1.55 line-height */
-.resume-item p {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--primary-ink);
-  margin-bottom: 6px;
-  text-align: left;
+.os-star {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
-.resume-item ul {
-  margin-left: 1.2em;
-  margin-bottom: 6px;
+/* ==========================================================================
+   7. SKILLS MATRIX
+   ========================================================================== */
+.resume-skills {
+  margin-bottom: 8px;
+  break-inside: avoid;
 }
 
-.resume-item li {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--primary-ink);
-  margin-bottom: 4px;
-  text-align: left;
-}
-
-/* Skill Tags / Badges in Subtle Fill */
-.resume-skills-grid {
+.skill-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 0.5px dotted var(--border-dotted);
 }
 
-.resume-skill-tag {
-  background-color: var(--subtle-fill);
-  border: 1px solid rgba(17, 24, 39, 0.08);
+.skill-row:last-child {
+  border-bottom: none;
+}
+
+.skill-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  width: 24mm;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.skill-text {
+  font-size: 12.5px;
+  font-weight: 400;
   color: var(--primary-ink);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   8. EDUCATION
+   ========================================================================== */
+.edu-item {
+  margin-bottom: 8px;
+  break-inside: avoid;
+}
+
+.edu-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.edu-major {
+  font-family: var(--font-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--primary-ink);
+}
+
+.edu-school {
   font-size: 13px;
   font-weight: 500;
-  padding: 5px 12px;
-  border-radius: 2px;
+  color: var(--secondary-ink);
 }
 
-.resume-skill-tag strong {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  color: var(--primary-ink);
-  margin-right: 4px;
+.edu-date {
+  font-size: 11.5px;
+  color: var(--muted-ink);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Two-Page Deliberate Page Break */
+.edu-desc {
+  font-size: 12.5px;
+  color: var(--secondary-ink);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+/* Page Break */
 .resume-page-break {
   page-break-before: always;
   break-before: page;
-  margin-top: 48px;
-  padding-top: 24px;
+  margin-top: 24px;
 }
 
-/* Print Rules (@media print): 1:1 Vector A4 Document */
+/* ==========================================================================
+   9. PRINT CALIBRATION (@media print)
+   ========================================================================== */
 @media print {
   @page {
     size: A4;
-    margin: 16mm 20mm;
+    margin: 12mm 14mm 12mm 14mm;
   }
   html, body {
     background: #ffffff !important;
@@ -240,14 +538,18 @@ body {
     max-width: 100% !important;
     padding: 0 !important;
     border: none !important;
+    box-shadow: none !important;
   }
   .resume-section {
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  .resume-item {
+  .resume-project {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+  .resume-timeline {
+    break-inside: avoid;
   }
 }
 
@@ -257,73 +559,265 @@ body {
   <div class="chronicle-resume-sheet">
 
   <header class="resume-header">
-    <h1 class="resume-name">林简 (Jian Lin)</h1>
-    <div class="resume-headline">资深系统架构师 / 设计系统工程师</div>
-    <div class="resume-contact">
-      <span>Email: <a href="mailto:jian.lin@chronicle.design">jian.lin@chronicle.design</a></span>
-      <span>Tel: +86 138-0123-4567</span>
-      <span>Loc: 上海 / 远程</span>
-      <span>GitHub: <a href="https://github.com/jianlin" target="_blank">github.com/jianlin</a></span>
-      <span>Web: <a href="https://chronicle.design" target="_blank">chronicle.design</a></span>
+    <div class="resume-header-left">
+      <div class="resume-name-row">
+        <h1 class="resume-name">林简</h1>
+        <span class="resume-alias">(Jian Lin)</span>
+      </div>
+      <div class="resume-headline">资深系统架构师 / 计算排版工程师</div>
+      <div class="resume-contact">
+        <span>Email: <a href="mailto:jian.lin@chronicle.design">jian.lin@chronicle.design</a></span>
+        <span>Tel: +86 138-0123-4567</span>
+        <span>Loc: 上海 / 远程</span>
+        <span>GitHub: <a href="https://github.com/jianlin" target="_blank">github.com/jianlin</a></span>
+        <span>Web: <a href="https://chronicle.design" target="_blank">chronicle.design</a></span>
+      </div>
     </div>
+    <div class="resume-seal" title="Chronicle Imprint">林</div>
   </header>
-<section class="resume-section"><h2 class="resume-section-title">个人简介</h2>
-<p>软件研发与系统架构经历，专注于前端架构、文档生成流水线与设计系统工程化。注重排版规范与自动化校验结合，探索跨媒介一致性输出。</p>
-</section>
-<section class="resume-section"><h2 class="resume-section-title">工作经历</h2>
 
-        <div class="resume-item-header">
-          <div><span class="resume-item-role">首席架构师</span> <span class="resume-item-company">/ 前沿数字工坊</span></div>
-        </div>
-<p><em>2022.03 - 至今</em></p>
-<ul>
-<li>主导自包含文档生成流水线，统一 Web、PDF、Slides 多端设计 Token。</li>
-<li>研发基于无头浏览器的确定性渲染与守门引擎，将多端渲染一致性提升至 99.8%。</li>
-<li>指导核心架构团队，沉淀 30+ 模块化排版组件，并在全公司推广排版范式。</li>
-</ul>
+      <div class="resume-metrics">
+        
+          <div class="metric">
+            <div class="metric-value">99.8%</div>
+            <div class="metric-label">跨端渲染一致性</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">10M+</div>
+            <div class="metric-label">月活跃读者规模</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">30+</div>
+            <div class="metric-label">模块化排版组件</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value">45%</div>
+            <div class="metric-label">首屏渲染耗时缩减</div>
+          </div>
+      </div>
 
-        <div class="resume-item-header">
-          <div><span class="resume-item-role">高级前端架构师</span> <span class="resume-item-company">/ 栖云科技</span></div>
-        </div>
-<p><em>2018.06 - 2022.02</em></p>
-<ul>
-<li>负责超大规模协作编辑器的底层排版内核研发，攻克 CJK 中英混排与断字排版难题。</li>
-<li>构建端到端自动化视觉回归测试套件，降低线上排版崩坏事故达 90%。</li>
-<li>设计并落地基于 Web 标准的多渠道导出体系，支持 A4 矢量 PDF 渲染。</li>
-</ul>
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>个人简介</span>
+        <span class="sub">SUMMARY</span>
+      </h2>
+      <div class="resume-text"><p>软件研发与系统架构经历，专注于前端系统架构、文档生成流水线与计算排版自动化。具有十余年富文本引擎与设计系统工程化落地经验，擅长将复杂的排版规范沉淀为确定性的渲染守门机制。</p>
+</div>
+    </section>
 
-        <div class="resume-item-header">
-          <div><span class="resume-item-role">核心研发工程师</span> <span class="resume-item-company">/ 先锋云创</span></div>
-        </div>
-<p><em>2015.07 - 2018.05</em></p>
-<ul>
-<li>参与高性能富文本解析引擎开发，负责 AST 语法树转换与样式编译器。</li>
-<li>主导跨端排版性能优化，首屏渲染耗时缩减 45%。</li>
-</ul>
-</section>
-<section class="resume-section"><h2 class="resume-section-title">核心项目</h2>
-<div class="resume-item-header"><span class="resume-item-role">Chronicle Design Engine</span></div>
-<p><em>主导设计与实现 · 2026</em></p>
-<ul>
-<li>架构基于 Node.js 与 Chromium 管道的设计系统技能包。</li>
-<li>实现针对排版约束的静态 AST 质量门禁，杜绝两端对齐、色相污染与行高塌陷。</li>
-<li>支持单页长文、16:9 幻灯片与个人简历三种形态编译与导出。</li>
-</ul>
-</section>
-<section class="resume-section"><h2 class="resume-section-title">技能与专长</h2>
-<ul>
-<li><strong>架构与语言</strong>: TypeScript, Node.js (ESM), JavaScript, CSS Paged Media, Python</li>
-<li><strong>工程化与质量</strong>: Playwright, Puppeteer, AST 解析与编译器, 视觉回归测试, CI/CD</li>
-<li><strong>排版与设计</strong>: Chronicle Token System, 中英排版规范 (Pangu), 字体度量, 印刷排版</li>
-</ul>
-</section>
-<section class="resume-section"><h2 class="resume-section-title">教育背景</h2>
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>职业演进</span>
+        <span class="sub">CAREER EVOLUTION</span>
+      </h2>
+      
+      <div class="resume-timeline">
+        
+          <div class="tl-step">
+            <div class="tl-top"><span class="tl-year">2022 - 至今</span><span class="tl-head">体系架构</span></div>
+            <div class="tl-body">主导自包含跨媒介文档流水线与开源设计系统，推动计算排版规范在企业级与 AI Agent 场景规模化落地。</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-top"><span class="tl-year">2018 - 2022</span><span class="tl-head">内核突破</span></div>
+            <div class="tl-body">攻克超大规模协作编辑与 CJK 混排断字难题，建立端到端自动化视觉守门与毫秒级导出体系。</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-top"><span class="tl-year">2015 - 2018</span><span class="tl-head">架构萌芽</span></div>
+            <div class="tl-body">从基础富文本开发到主导 AST 语法树编译器重构，完成从界面实现到排版内核工程的认知跃迁。</div>
+          </div>
+      </div>
+    </section>
 
-        <div class="resume-item-header">
-          <div><span class="resume-item-role">计算机科学与技术 · 硕士</span> <span class="resume-item-company">/ 浙江大学</span></div>
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>工作经历</span>
+        <span class="sub">EXPERIENCE</span>
+      </h2>
+      
+        <div class="resume-project">
+          <div class="proj-head">
+            <div class="proj-title-group">
+              <span class="proj-name">首席架构师</span>
+              <span class="proj-company">| 前沿数字工坊</span>
+              <span class="proj-badge">架构主导</span>
+            </div>
+            <span class="proj-date">2022.03 - 至今 · 上海</span>
+          </div>
+          
+          <div class="proj-lines">
+            
+              <div class="proj-row">
+                <div class="proj-label">角色</div>
+                <div class="proj-text">主导自包含文档生成流水线架构，统一 Web、PDF、Slides 多端设计系统与 Token 规范。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">动作</div>
+                <div class="proj-text">研发基于无头浏览器的确定性渲染引擎，构建 AST 静态排版质量守门机制，重构富文本编译链路。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">结果</div>
+                <div class="proj-text">实现多端渲染一致性达到 <span class="hl">99.8%</span>，沉淀 30+ 模块化排版组件，杜绝线上排版崩坏事故。</div>
+              </div>
+          </div>
         </div>
-<p><em>2012.09 - 2015.06</em></p>
-</section>
+
+        <div class="resume-project">
+          <div class="proj-head">
+            <div class="proj-title-group">
+              <span class="proj-name">高级前端架构师</span>
+              <span class="proj-company">| 栖云科技</span>
+              <span class="proj-badge">核心攻坚</span>
+            </div>
+            <span class="proj-date">2018.06 - 2022.02 · 杭州</span>
+          </div>
+          
+          <div class="proj-lines">
+            
+              <div class="proj-row">
+                <div class="proj-label">角色</div>
+                <div class="proj-text">负责超大规模协作编辑器的底层排版内核研发，承载千万级在线文档的实时协同排版。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">动作</div>
+                <div class="proj-text">攻克 CJK 中英混排与微排版标点悬挂难题，构建基于无头环境的自动化视觉回归测试套件。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">结果</div>
+                <div class="proj-text">降低线上排版事故达 <span class="hl">90%</span>，设计并落地多渠道导出体系，支持毫秒级 A4 矢量 PDF 渲染。</div>
+              </div>
+          </div>
+        </div>
+
+        <div class="resume-project">
+          <div class="proj-head">
+            <div class="proj-title-group">
+              <span class="proj-name">核心研发工程师</span>
+              <span class="proj-company">| 先锋云创</span>
+              <span class="proj-badge">核心成员</span>
+            </div>
+            <span class="proj-date">2015.07 - 2018.05 · 上海</span>
+          </div>
+          
+          <div class="proj-lines">
+            
+              <div class="proj-row">
+                <div class="proj-label">角色</div>
+                <div class="proj-text">参与高性能富文本解析引擎开发，负责文档 AST 语法树转换与核心样式编译器。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">动作</div>
+                <div class="proj-text">重构样式层叠计算逻辑，消灭重复重排与样式污染，搭建端到端组件单元测试矩阵。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">结果</div>
+                <div class="proj-text">首屏渲染耗时缩减 <span class="hl">45%</span>，平稳承载首轮亿级大促流量洪峰。</div>
+              </div>
+          </div>
+        </div>
+    </section>
+
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>核心项目</span>
+        <span class="sub">FEATURED PROJECTS</span>
+      </h2>
+      
+        <div class="resume-project">
+          <div class="proj-head">
+            <div class="proj-title-group">
+              <span class="proj-name">Chronicle Design System</span>
+              
+              <span class="proj-badge">开源项目</span>
+            </div>
+            <span class="proj-date">主导设计与实现 · 2026</span>
+          </div>
+          
+          <div class="proj-lines">
+            
+              <div class="proj-row">
+                <div class="proj-label">角色</div>
+                <div class="proj-text">面向长文阅读、社交卡片、演示幻灯与个人简历的通用排版系统技能包主架构师。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">动作</div>
+                <div class="proj-text">严格定义色调禁欲与排版极性规范，实现纯前端/Node.js 跨媒介确定性排版流水线。</div>
+              </div>
+              <div class="proj-row">
+                <div class="proj-label">结果</div>
+                <div class="proj-text">在 GitHub 开源发布即收获社区广泛关注，提供 0 外部重量级依赖的一键编译全套方案。</div>
+              </div>
+          </div>
+        </div>
+    </section>
+
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>开源与技术作品</span>
+        <span class="sub">OPEN SOURCE & ARTIFACTS</span>
+      </h2>
+      
+      <div class="os-grid">
+        
+          <div class="os-item">
+            <div class="os-name"><a href="https://github.com/OwenCedaric/Chronicle" target="_blank">Chronicle</a></div>
+            <div class="os-desc">留白与极性排版系统与 AI Agent 技能包</div>
+            <div class="os-star">Star 1.2k+</div>
+          </div>
+          <div class="os-item">
+            <div class="os-name"><a href="https://github.com/vinta/pangu.js" target="_blank">Pangu.js</a></div>
+            <div class="os-desc">CJK 中英文混排自动化空格工具链核心贡献</div>
+            <div class="os-star">核心共建</div>
+          </div>
+          <div class="os-item">
+            <div class="os-name"><a href="https://github.com/jianlin/docengine" target="_blank">DocEngine</a></div>
+            <div class="os-desc">基于 Chromium 的高保真矢量 PDF 与长图导出工具</div>
+            <div class="os-star">Star 850+</div>
+          </div>
+          <div class="os-item">
+            <div class="os-name"><a href="https://github.com/jianlin/typolint" target="_blank">TypoLint</a></div>
+            <div class="os-desc">针对出版级排版规范的静态 AST 质量守门工具</div>
+            <div class="os-star">Star 420+</div>
+          </div>
+      </div>
+    </section>
+
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>技能与专长</span>
+        <span class="sub">SKILLS & EXPERTISE</span>
+      </h2>
+      
+      <div class="resume-skills">
+        
+          <div class="skill-row">
+            <div class="skill-label">架构与语言</div>
+            <div class="skill-text">TypeScript, Node.js (ESM), Web Standards, CSS Paged Media, Python</div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-label">排版与图形</div>
+            <div class="skill-text">CJK 排版度量, 字体子集化, SVG 几何变换, 印刷版面设计, Pangu 混排</div>
+          </div>
+          <div class="skill-row">
+            <div class="skill-label">工程化质量</div>
+            <div class="skill-text">Playwright, Puppeteer, AST 静态分析与质量守门, 自动化测试流水线</div>
+          </div>
+      </div>
+    </section>
+
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>教育背景</span>
+        <span class="sub">EDUCATION</span>
+      </h2>
+      
+        <div class="edu-item">
+          <div class="edu-head">
+            <div><span class="edu-major">计算机科学与技术 · 硕士</span> <span class="edu-school">| 浙江大学</span></div>
+            <span class="edu-date">2012.09 - 2015.06 · 杭州</span>
+          </div>
+          <div class="edu-desc">研究方向：分布式系统与图形图像排版渲染；曾获研究生国家奖学金。</div>
+        </div>
+    </section>
   </div>
 </body>
 </html>

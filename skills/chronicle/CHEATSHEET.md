@@ -49,7 +49,7 @@ node skills/chronicle/scripts/profile.mjs --name "CEDAR" --title "Systems Archit
 1. Left-aligned body (never justify).
 2. Exactly one sole accent, no warning colors.
 3. Body weight 300-400 for prose, 400 for resume.
-4. Line-height ratio: Page >= 1.85, Slides = 1.8, Resume >= 1.7.
+4. Line-height ratio: Page >= 1.80, Slides >= 1.75, Resume 1.55 (>= 1.50).
 5. No software drop shadows in reading flow.
 6. Reading container width <= 896px.
 7. CJK and Latin characters separated by space.

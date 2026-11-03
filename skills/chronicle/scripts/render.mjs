@@ -181,7 +181,7 @@ if (docFormat === 'slides') {
     .replace('{{SLIDES}}', slideHtmls.join('\n'));
 
 // ==========================================
-// 2. FORMAT: RESUME (A4 Professional CV)
+// 2. FORMAT: RESUME (Architectural & Editorial CV)
 // ==========================================
 } else if (docFormat === 'resume') {
   const cssPath = resolve(__dirname, '../templates/styles/resume.css');
@@ -189,60 +189,265 @@ if (docFormat === 'slides') {
   const cssContent = readFileSync(cssPath, 'utf-8');
   const tplContent = readFileSync(tplPath, 'utf-8');
 
-  const name = annotations.meta.name || docTitle;
+  const rawName = annotations.meta.name || docTitle;
+  let displayName = rawName;
+  let alias = annotations.meta.alias || '';
+  const nameParenMatch = rawName.match(/^([^(（]+)[(（]([^)）]+)[)）]/);
+  if (nameParenMatch) {
+    displayName = nameParenMatch[1].trim();
+    if (!alias) alias = nameParenMatch[2].trim();
+  }
+
   const headline = annotations.meta.headline || annotations.meta.title || '';
   const email = annotations.meta.email || '';
   const phone = annotations.meta.phone || '';
   const location = annotations.meta.location || '';
   const github = annotations.meta.github || '';
   const website = annotations.meta.website || '';
+  const sealChar = annotations.meta.seal || displayName.charAt(0) || 'C';
 
   const headerHtml = `
   <header class="resume-header">
-    <h1 class="resume-name">${name}</h1>
-    ${headline ? `<div class="resume-headline">${headline}</div>` : ''}
-    <div class="resume-contact">
-      ${email ? `<span>Email: <a href="mailto:${email}">${email}</a></span>` : ''}
-      ${phone ? `<span>Tel: ${phone}</span>` : ''}
-      ${location ? `<span>Loc: ${location}</span>` : ''}
-      ${github ? `<span>GitHub: <a href="https://${github}" target="_blank">${github}</a></span>` : ''}
-      ${website ? `<span>Web: <a href="https://${website}" target="_blank">${website}</a></span>` : ''}
+    <div class="resume-header-left">
+      <div class="resume-name-row">
+        <h1 class="resume-name">${displayName}</h1>
+        ${alias ? `<span class="resume-alias">(${alias})</span>` : ''}
+      </div>
+      ${headline ? `<div class="resume-headline">${headline}</div>` : ''}
+      <div class="resume-contact">
+        ${email ? `<span>Email: <a href="mailto:${email}">${email}</a></span>` : ''}
+        ${phone ? `<span>Tel: ${phone}</span>` : ''}
+        ${location ? `<span>Loc: ${location}</span>` : ''}
+        ${github ? `<span>GitHub: <a href="https://${github.replace(/^https?:\/\//, '')}" target="_blank">${github}</a></span>` : ''}
+        ${website ? `<span>Web: <a href="https://${website.replace(/^https?:\/\//, '')}" target="_blank">${website}</a></span>` : ''}
+      </div>
     </div>
+    <div class="resume-seal" title="Chronicle Imprint">${sealChar}</div>
   </header>`;
 
-  // Custom marked renderer for resume sections and items
-  const resumeRenderer = new marked.Renderer();
-  resumeRenderer.heading = function({ text, depth }) {
-    if (depth === 2) {
-      return `<h2 class="resume-section-title">${text}</h2>\n`;
-    }
-    if (depth === 3) {
-      const parts = text.split('|').map(p => p.trim());
-      if (parts.length > 1) {
-        return `
-        <div class="resume-item-header">
-          <div><span class="resume-item-role">${parts[0]}</span> <span class="resume-item-company">/ ${parts[1]}</span></div>
-        </div>\n`;
-      }
-      return `<div class="resume-item-header"><span class="resume-item-role">${text}</span></div>\n`;
-    }
-    return `<h${depth}>${text}</h${depth}>\n`;
+  const SECTION_SUB_MAP = {
+    '个人简介': 'SUMMARY',
+    '核心战绩': 'KEY IMPACT',
+    '核心指标': 'KEY IMPACT',
+    '职业演进': 'CAREER EVOLUTION',
+    '进化弧': 'EVOLUTION',
+    '工作经历': 'EXPERIENCE',
+    '职业经历': 'EXPERIENCE',
+    '核心项目': 'FEATURED PROJECTS',
+    '项目经历': 'PROJECTS',
+    '开源与技术作品': 'OPEN SOURCE & ARTIFACTS',
+    '开源与作品': 'OPEN SOURCE & ARTIFACTS',
+    '开源贡献': 'OPEN SOURCE',
+    '技能与专长': 'SKILLS & EXPERTISE',
+    '专业技能': 'SKILLS',
+    '教育背景': 'EDUCATION',
+    '学术背景': 'ACADEMIC'
   };
 
-  marked.setOptions({ renderer: resumeRenderer, gfm: true });
-  let bodyHtml = marked.parse(contentMd);
+  const sections = contentMd.split(/\n(?=##\s+)/);
+  const outSections = [];
 
-  // Wrap sections: split by <h2 class="resume-section-title">
-  const sections = bodyHtml.split(/(?=<h2 class="resume-section-title">)/);
-  const wrappedSections = sections.map(s => {
-    if (!s.trim()) return '';
-    return `<section class="resume-section">${s}</section>`;
-  }).join('\n');
+  for (const s of sections) {
+    const trimmed = s.trim();
+    if (!trimmed) continue;
+    const headerMatch = trimmed.match(/^##\s+([^\n]+)/);
+    if (!headerMatch) {
+      outSections.push(`<section class="resume-section">${marked.parse(trimmed)}</section>`);
+      continue;
+    }
+
+    let rawTitle = headerMatch[1].trim();
+    let subLabel = '';
+    if (rawTitle.includes('|')) {
+      const parts = rawTitle.split('|').map(p => p.trim());
+      rawTitle = parts[0];
+      subLabel = parts[1];
+    } else {
+      subLabel = SECTION_SUB_MAP[rawTitle] || '';
+    }
+
+    const content = trimmed.slice(headerMatch[0].length).trim();
+    let sectionHtml = '';
+
+    // 1. Metrics section (Executive Metrics Bar)
+    if (/核心战绩|核心指标|KEY IMPACT/i.test(rawTitle)) {
+      const lines = content.split('\n').filter(l => l.trim().startsWith('-'));
+      const metrics = [];
+      for (const l of lines) {
+        const m = l.match(/-\s*\*\*([^*]+)\*\*\s*\|\s*(.*)/);
+        if (m) metrics.push({ value: m[1].trim(), label: m[2].trim() });
+      }
+      sectionHtml = `
+      <div class="resume-metrics">
+        ${metrics.map(m => `
+          <div class="metric">
+            <div class="metric-value">${m.value}</div>
+            <div class="metric-label">${m.label}</div>
+          </div>`).join('')}
+      </div>`;
+      outSections.push(sectionHtml);
+      continue;
+    }
+
+    // 2. Timeline (Career Evolution Arc)
+    if (/职业演进|进化弧|CAREER EVOLUTION|TIMELINE/i.test(rawTitle)) {
+      const lines = content.split('\n').filter(l => l.trim().startsWith('-'));
+      const timeline = [];
+      for (const l of lines) {
+        const m = l.match(/-\s*\*\*([^*]+)\*\*\s*\|\s*([^|]+)\|\s*(.*)/);
+        if (m) timeline.push({ year: m[1].trim(), head: m[2].trim(), body: m[3].trim() });
+      }
+      sectionHtml = `
+      <div class="resume-timeline">
+        ${timeline.map(t => `
+          <div class="tl-step">
+            <div class="tl-top"><span class="tl-year">${t.year}</span><span class="tl-head">${t.head}</span></div>
+            <div class="tl-body">${t.body}</div>
+          </div>`).join('')}
+      </div>`;
+    }
+    // 3. Open Source & Artifacts
+    else if (/开源|OPEN SOURCE/i.test(rawTitle)) {
+      const lines = content.split('\n').filter(l => l.trim().startsWith('-'));
+      const osItems = [];
+      for (const l of lines) {
+        const m = l.match(/-\s*\[([^\]]+)\]\(([^)]+)\)\s*\|\s*([^|]+)\|\s*(.*)/);
+        if (m) osItems.push({ name: m[1].trim(), url: m[2].trim(), desc: m[3].trim(), star: m[4].trim() });
+      }
+      sectionHtml = `
+      <div class="os-grid">
+        ${osItems.map(item => `
+          <div class="os-item">
+            <div class="os-name"><a href="${item.url}" target="_blank">${item.name}</a></div>
+            <div class="os-desc">${item.desc}</div>
+            <div class="os-star">${item.star}</div>
+          </div>`).join('')}
+      </div>`;
+    }
+    // 4. Skills & Expertise
+    else if (/技能|专长|SKILLS/i.test(rawTitle)) {
+      const lines = content.split('\n').filter(l => l.trim().startsWith('-'));
+      const skills = [];
+      for (const l of lines) {
+        const m = l.match(/-\s*\*\*([^*]+)\*\*:\s*(.*)/);
+        if (m) skills.push({ label: m[1].trim(), text: m[2].trim() });
+      }
+      sectionHtml = `
+      <div class="resume-skills">
+        ${skills.map(s => `
+          <div class="skill-row">
+            <div class="skill-label">${s.label}</div>
+            <div class="skill-text">${s.text}</div>
+          </div>`).join('')}
+      </div>`;
+    }
+    // 5. Experience / Projects (Structured Role / Actions / Impact)
+    else if (/经历|项目|EXPERIENCE|PROJECTS/i.test(rawTitle)) {
+      const items = content.split(/\n(?=###\s+)/);
+      const projHtmls = [];
+      for (const item of items) {
+        const itemTrim = item.trim();
+        if (!itemTrim.startsWith('###')) {
+          if (itemTrim) projHtmls.push(`<div class="resume-intro">${marked.parse(itemTrim)}</div>`);
+          continue;
+        }
+        const headMatch = itemTrim.match(/^###\s+([^|\n]+)(?:\|\s*([^\n]+))?/);
+        if (!headMatch) continue;
+        const role = headMatch[1].trim();
+        const company = headMatch[2] ? headMatch[2].trim() : '';
+
+        let date = '';
+        let badge = '';
+        const dateMatch = itemTrim.match(/\*([^*]+)\*/);
+        if (dateMatch) {
+          const parts = dateMatch[1].split('|').map(p => p.trim());
+          date = parts[0];
+          if (parts[1]) badge = parts[1];
+        }
+
+        const lines = [];
+        const bulletMatches = [...itemTrim.matchAll(/^[ \t]*-[ \t]+\*\*([^*]+)\*\*:\s*([^\n]+)/gm)];
+        for (const bm of bulletMatches) {
+          lines.push({ label: bm[1].trim(), text: bm[2].trim() });
+        }
+
+        // If not 3-part bullets, parse regular bullets
+        let bulletsHtml = '';
+        if (lines.length === 0) {
+          const standardBullets = [...itemTrim.matchAll(/^[ \t]*-[ \t]+([^\n]+)/gm)];
+          if (standardBullets.length > 0) {
+            bulletsHtml = `<ul class="resume-bullets">${standardBullets.map(b => `<li>${b[1].trim()}</li>`).join('')}</ul>`;
+          }
+        }
+
+        projHtmls.push(`
+        <div class="resume-project">
+          <div class="proj-head">
+            <div class="proj-title-group">
+              <span class="proj-name">${role}</span>
+              ${company ? `<span class="proj-company">| ${company}</span>` : ''}
+              ${badge ? `<span class="proj-badge">${badge}</span>` : ''}
+            </div>
+            ${date ? `<span class="proj-date">${date}</span>` : ''}
+          </div>
+          ${lines.length > 0 ? `
+          <div class="proj-lines">
+            ${lines.map(l => `
+              <div class="proj-row">
+                <div class="proj-label">${l.label}</div>
+                <div class="proj-text">${l.text}</div>
+              </div>`).join('')}
+          </div>` : bulletsHtml}
+        </div>`);
+      }
+      sectionHtml = projHtmls.join('\n');
+    }
+    // 6. Education
+    else if (/教育|EDUCATION|学术/i.test(rawTitle)) {
+      const items = content.split(/\n(?=###\s+)/);
+      const eduHtmls = [];
+      for (const item of items) {
+        const itemTrim = item.trim();
+        if (!itemTrim.startsWith('###')) continue;
+        const headMatch = itemTrim.match(/^###\s+([^|\n]+)(?:\|\s*([^\n]+))?/);
+        if (!headMatch) continue;
+        const major = headMatch[1].trim();
+        const school = headMatch[2] ? headMatch[2].trim() : '';
+        let date = '';
+        const dateMatch = itemTrim.match(/\*([^*]+)\*/);
+        if (dateMatch) date = dateMatch[1].trim();
+        const descMatches = [...itemTrim.matchAll(/^[ \t]*-[ \t]+([^\n]+)/gm)];
+        const desc = descMatches.map(m => m[1].trim()).join('<br>');
+        eduHtmls.push(`
+        <div class="edu-item">
+          <div class="edu-head">
+            <div><span class="edu-major">${major}</span>${school ? ` <span class="edu-school">| ${school}</span>` : ''}</div>
+            ${date ? `<span class="edu-date">${date}</span>` : ''}
+          </div>
+          ${desc ? `<div class="edu-desc">${desc}</div>` : ''}
+        </div>`);
+      }
+      sectionHtml = eduHtmls.join('\n');
+    }
+    // 7. General Section (Summary, etc.)
+    else {
+      sectionHtml = `<div class="resume-text">${marked.parse(content)}</div>`;
+    }
+
+    outSections.push(`
+    <section class="resume-section">
+      <h2 class="resume-section-title">
+        <span>${rawTitle}</span>
+        ${subLabel ? `<span class="sub">${subLabel}</span>` : ''}
+      </h2>
+      ${sectionHtml}
+    </section>`);
+  }
 
   finalHtml = tplContent
-    .replace('{{TITLE}}', `${name} - 简历`)
+    .replace('{{TITLE}}', `${displayName} - 简历`)
     .replace('{{STYLES}}', cssContent)
-    .replace('{{CONTENT}}', `${headerHtml}\n${wrappedSections}`);
+    .replace('{{CONTENT}}', `${headerHtml}\n${outSections.join('\n')}`);
 
 // ==========================================
 // 3. FORMAT: PAGE (Long-form Reading Article)

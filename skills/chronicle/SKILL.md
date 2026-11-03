@@ -14,7 +14,7 @@ description: 'Typeset and render Markdown documents into long-form reading HTML,
 3. **Vacuum as Rhythm**: Massive vertical whitespace acts as punctuation.
 4. **Alignment Contamination Prohibition**: Narrative body text **must always be Left-Aligned (flush-left, ragged-right)**. `Justify` alignment is strictly forbidden.
 5. **Body Weight Discipline**: Narrative paragraphs use 300 Light or 400 Regular; Resume and cards use 400 Regular for scanability; weights ≥ 600 are reserved for titles and metrics.
-6. **Line-Height Collapse Prohibition**: Body line-height ratio **must never drop below 1.85** for Page, **locked at 1.8** for Slides, **>= 1.7** for Resume.
+6. **Line-Height Collapse Prohibition**: Body line-height ratio **must never drop below 1.80** for Page, **>= 1.75** for Slides, **1.55 (>= 1.50)** for Resume.
 7. **Shadow Abuse Prohibition**: Drop shadows are strictly prohibited in the reading flow (only a 2% micro-shadow on left chat bubble).
 8. **Visual Field Ceiling**: Container max-width `896px` (Page), with minimum `24px` horizontal safe padding.
 9. **CJK-Latin Spacing**: A space must always separate CJK and Latin characters/numerals.
@@ -25,7 +25,7 @@ description: 'Typeset and render Markdown documents into long-form reading HTML,
 |---|---|---|---|
 | **Page** (Default) | `type: "page"` / `--format page` | Core reading container 896px, Epigraphs, Section breaks, Chat box, Coda. | Self-contained HTML, 2x Retina Long PNG, A4 Vector PDF with running header/footer. |
 | **Slides** | `type: "slides"` / `--format slides` | 16:9 Aspect ratio, max 3 colors per slide, line spacing locked at 1.8, text overflow cut, keyboard/touch navigation. | Interactive HTML presentation, 16:9 Slide deck vector PDF. |
-| **Resume** | `type: "resume"` / `--format resume` | Pure white `#ffffff` base, `#f5f5f5` subtle fill, line-height >= 1.7, spacious 2-page layout strictly preferred over 1-page compression. | Clean A4 print HTML, Vector PDF. |
+| **Resume** | `type: "resume"` / `--format resume` | Pure white `#ffffff` base, pitch-black ink `#111827`, 400 Regular body, 1.55 line-height, 4-column metrics, evolution arc, 3-part structured bullets (Role/Actions/Impact), pressmark seal. | Clean A4 print HTML, Vector PDF, Long PNG. |
 | **Profile** | `profile.mjs` | Theme-adaptive SVG banner with hollow stroke typography + austere GitHub Profile README. | Adaptive Dark/Light `banner.svg`, `README.md`. |
 | **Favicon** | `favicon.mjs` | Austere geometric hairline circle with hollow Serif glyph and automatic dark/light switching. | Vector `favicon.svg`, Retina `favicon.png`. |
 

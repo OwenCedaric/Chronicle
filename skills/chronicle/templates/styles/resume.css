@@ -1,27 +1,31 @@
 /**
  * Chronicle Design System - Resume Stylesheet
- * Strictly adheres to ChronicleDesignSystem.md Section 3:
- * - Base Surface maps to pure white (#ffffff).
- * - Subtle Fill maps to pale gray (#f5f5f5).
- * - Accent color (#82a1b9) remains.
- * - Line-height minimum is 1.7.
- * - Spacious layout strictly preferred over compressed single-page.
- * - No software drop shadows.
+ * Architectural & Editorial Resume Discipline, fused with Kami recruiter-pass standards:
+ * - Chromatic Austerity: Pure white paper (#ffffff), deep carbon ink (#111827), sole accent (#537791).
+ * - Publisher Pressmark Seal: Distinctive classical seal badge in header.
+ * - Executive Metrics Bar: 4-column key metrics anchor (tabular-nums).
+ * - Three-Part Bullet Rows: Fixed Role / Actions / Impact structure with .hl data highlights.
+ * - Career Evolution Arc: 3-step judgment progression timeline.
+ * - Open Source & Artifacts: 2-column grid with Stars/Impact.
+ * - Categorized Skills Matrix: Fixed-width label with crisp tag flow.
+ * - Print Calibrated: Exact A4 proportions (210mm x 297mm), zero orphan sections.
  */
 
 :root {
   --base-surface: #ffffff;
   --primary-ink: #111827;
   --secondary-ink: #4b5563;
+  --muted-ink: #4b5563;
   --sole-accent: #537791;
+  --accent-tint: rgba(83, 119, 145, 0.08);
   --subtle-border: rgba(17, 24, 39, 0.12);
+  --border-dotted: rgba(17, 24, 39, 0.16);
   --subtle-fill: #f3f4f6;
-  --stroke-tint: rgba(17, 24, 39, 0.55);
 
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "Georgia", "Times New Roman", serif;
   --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", SimSun, serif;
 
-  --resume-max-width: 800px;
+  --resume-max-width: 820px;
 }
 
 *, *::before, *::after {
@@ -31,16 +35,17 @@
 }
 
 html {
-  background-color: #f7f7f7;
+  background-color: #fbf9f6;
   color: var(--primary-ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: #f7f7f7;
+  background-color: #fbf9f6;
   min-height: 100vh;
-  padding: 48px 16px;
+  padding: 36px 16px;
 }
 
 /* Resume Document Sheet (A4 Proportion on Screen) */
@@ -48,178 +53,471 @@ body {
   max-width: var(--resume-max-width);
   margin: 0 auto;
   background-color: var(--base-surface);
-  padding: 56px 64px 72px;
+  padding: 44px 52px 48px;
   border: 1px solid var(--subtle-border);
-  box-sizing: border-box;
 }
 
-/* Header */
+/* ==========================================================================
+   1. HEADER & PUBLISHER SEAL
+   ========================================================================== */
 .resume-header {
-  border-bottom: 1px solid var(--subtle-border);
-  padding-bottom: 28px;
-  margin-bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1.2px solid var(--primary-ink);
+  margin-bottom: 18px;
+}
+
+.resume-header-left {
+  flex: 1;
+}
+
+.resume-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 
 .resume-name {
   font-family: var(--font-serif);
+  font-size: 26px;
   font-weight: 700;
-  font-size: 32px;
-  line-height: 1.15;
   color: var(--primary-ink);
-  margin-bottom: 8px;
+  line-height: 1.1;
   letter-spacing: -0.01em;
+}
+
+.resume-alias {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted-ink);
+  letter-spacing: 0.02em;
 }
 
 .resume-headline {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: 16px;
-  color: var(--secondary-ink);
-  margin-bottom: 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--sole-accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
 }
 
 .resume-contact {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px 24px;
-  font-size: 13px;
+  align-items: center;
+  gap: 6px 14px;
+  font-size: 12px;
   color: var(--secondary-ink);
 }
 
-.resume-contact span,
+.resume-contact span {
+  display: inline-flex;
+  align-items: center;
+}
+
 .resume-contact a {
   color: var(--secondary-ink);
   text-decoration: none;
+  transition: color 0.15s;
 }
 
 .resume-contact a:hover {
   color: var(--sole-accent);
 }
 
-/* Section Structure */
+.resume-seal {
+  width: 44px;
+  height: 44px;
+  background: var(--primary-ink);
+  color: #fbf9f6;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-left: 20px;
+  user-select: none;
+}
+
+/* ==========================================================================
+   2. EXECUTIVE METRICS BAR
+   ========================================================================== */
+.resume-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  background-color: var(--subtle-fill);
+  border: 1px solid var(--subtle-border);
+  border-radius: 3px;
+  padding: 10px 16px;
+  margin-bottom: 20px;
+  break-inside: avoid;
+}
+
+.resume-metrics .metric {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.resume-metrics .metric-value {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--sole-accent);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.resume-metrics .metric-label {
+  font-size: 11.5px;
+  color: var(--secondary-ink);
+  line-height: 1.25;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   3. SECTION STRUCTURE
+   ========================================================================== */
 .resume-section {
-  margin-bottom: 36px;
+  margin-bottom: 20px;
+  break-inside: avoid-page;
 }
 
 .resume-section-title {
   font-family: var(--font-serif);
+  font-size: 15px;
   font-weight: 700;
-  font-size: 18px;
-  line-height: 1.3;
   color: var(--primary-ink);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  border-bottom: 1px solid var(--subtle-border);
-  padding-bottom: 8px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.resume-section-title::after {
-  content: "";
-  height: 2px;
-  width: 24px;
-  background-color: var(--sole-accent);
-  display: inline-block;
-}
-
-/* Experience / Project Entry */
-.resume-item {
-  margin-bottom: 24px;
-}
-
-.resume-item-header {
+  border-bottom: 0.8px solid var(--subtle-border);
+  padding-bottom: 4px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 6px;
+  letter-spacing: 0.04em;
 }
 
-.resume-item-role {
-  font-family: var(--font-serif);
+.resume-section-title .sub {
+  font-family: var(--font-body);
+  font-size: 10.5px;
   font-weight: 600;
-  font-size: 16px;
+  color: var(--muted-ink);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   4. CAREER EVOLUTION ARC (TIMELINE)
+   ========================================================================== */
+.resume-timeline {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  break-inside: avoid;
+}
+
+.resume-timeline .tl-step {
+  flex: 1;
+  background-color: var(--subtle-fill);
+  border: 1px solid var(--subtle-border);
+  border-top: 2.5px solid var(--sole-accent);
+  border-radius: 2px;
+  padding: 8px 10px;
+}
+
+.resume-timeline .tl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.resume-timeline .tl-year {
+  font-family: var(--font-serif);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--sole-accent);
+}
+
+.resume-timeline .tl-head {
+  font-size: 12px;
+  font-weight: 600;
   color: var(--primary-ink);
 }
 
-.resume-item-company {
-  font-weight: 500;
+.resume-timeline .tl-body {
+  font-size: 11.5px;
   color: var(--secondary-ink);
-  font-size: 14px;
-  margin-left: 8px;
+  line-height: 1.45;
 }
 
-.resume-item-date {
-  font-family: var(--font-body);
-  font-size: 12.5px;
+/* ==========================================================================
+   5. STRUCTURED PROJECT / EXPERIENCE (ROLE / ACTIONS / IMPACT)
+   ========================================================================== */
+.resume-project {
+  margin-bottom: 15px;
+  break-inside: avoid;
+}
+
+.resume-project:last-child {
+  margin-bottom: 4px;
+}
+
+.proj-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.proj-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.proj-name {
+  font-family: var(--font-serif);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--primary-ink);
+}
+
+.proj-company {
+  font-size: 13.5px;
+  font-weight: 500;
   color: var(--secondary-ink);
-  letter-spacing: 0.03em;
+}
+
+.proj-badge {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  background: var(--accent-tint);
+  padding: 1px 6px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proj-date {
+  font-size: 11.5px;
+  color: var(--muted-ink);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.proj-lines {
+  display: table;
+  width: 100%;
+  margin-top: 3px;
+}
+
+.proj-row {
+  display: table-row;
+}
+
+.proj-label {
+  display: table-cell;
+  width: 13mm;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  letter-spacing: 0.05em;
+  vertical-align: top;
+  padding: 2.5px 0;
+}
+
+.proj-text {
+  display: table-cell;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--primary-ink);
+  line-height: 1.55;
+  padding: 2.5px 0 2.5px 6px;
+}
+
+.hl {
+  color: var(--sole-accent);
+  font-weight: 600;
+}
+
+/* Fallback Standard Bullets */
+.resume-bullets {
+  margin-left: 1.2em;
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+
+.resume-bullets li {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--primary-ink);
+  line-height: 1.55;
+  margin-bottom: 3px;
+}
+
+/* ==========================================================================
+   6. OPEN SOURCE & TECHNICAL ARTIFACTS
+   ========================================================================== */
+.os-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 18px;
+  margin-bottom: 8px;
+  break-inside: avoid;
+}
+
+.os-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 0.5px dotted var(--border-dotted);
+  min-width: 0;
+}
+
+.os-name {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.os-name a {
+  color: var(--primary-ink);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.os-name a:hover {
+  color: var(--sole-accent);
+}
+
+.os-desc {
+  font-size: 12px;
+  color: var(--secondary-ink);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Descriptions & Bullets: 400 Regular with cohesive 1.55 line-height */
-.resume-item p {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--primary-ink);
-  margin-bottom: 6px;
-  text-align: left;
+.os-star {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  white-space: nowrap;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
-.resume-item ul {
-  margin-left: 1.2em;
-  margin-bottom: 6px;
+/* ==========================================================================
+   7. SKILLS MATRIX
+   ========================================================================== */
+.resume-skills {
+  margin-bottom: 8px;
+  break-inside: avoid;
 }
 
-.resume-item li {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--primary-ink);
-  margin-bottom: 4px;
-  text-align: left;
-}
-
-/* Skill Tags / Badges in Subtle Fill */
-.resume-skills-grid {
+.skill-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 0.5px dotted var(--border-dotted);
 }
 
-.resume-skill-tag {
-  background-color: var(--subtle-fill);
-  border: 1px solid rgba(17, 24, 39, 0.08);
+.skill-row:last-child {
+  border-bottom: none;
+}
+
+.skill-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--sole-accent);
+  width: 24mm;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.skill-text {
+  font-size: 12.5px;
+  font-weight: 400;
   color: var(--primary-ink);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   8. EDUCATION
+   ========================================================================== */
+.edu-item {
+  margin-bottom: 8px;
+  break-inside: avoid;
+}
+
+.edu-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.edu-major {
+  font-family: var(--font-serif);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--primary-ink);
+}
+
+.edu-school {
   font-size: 13px;
   font-weight: 500;
-  padding: 5px 12px;
-  border-radius: 2px;
+  color: var(--secondary-ink);
 }
 
-.resume-skill-tag strong {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  color: var(--primary-ink);
-  margin-right: 4px;
+.edu-date {
+  font-size: 11.5px;
+  color: var(--muted-ink);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Two-Page Deliberate Page Break */
+.edu-desc {
+  font-size: 12.5px;
+  color: var(--secondary-ink);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+/* Page Break */
 .resume-page-break {
   page-break-before: always;
   break-before: page;
-  margin-top: 48px;
-  padding-top: 24px;
+  margin-top: 24px;
 }
 
-/* Print Rules (@media print): 1:1 Vector A4 Document */
+/* ==========================================================================
+   9. PRINT CALIBRATION (@media print)
+   ========================================================================== */
 @media print {
   @page {
     size: A4;
-    margin: 16mm 20mm;
+    margin: 12mm 14mm 12mm 14mm;
   }
   html, body {
     background: #ffffff !important;
@@ -229,13 +527,17 @@ body {
     max-width: 100% !important;
     padding: 0 !important;
     border: none !important;
+    box-shadow: none !important;
   }
   .resume-section {
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  .resume-item {
+  .resume-project {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+  .resume-timeline {
+    break-inside: avoid;
   }
 }

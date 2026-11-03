@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 896 260" width="896" height="260">
+  <defs>
+    <style>
+      :root { 
+        --base-surface: #fbf9f6;
+        --primary-ink: #2f3542;
+        --secondary-ink: #57606f;
+        --sole-accent: #537791;
+        --subtle-border: rgba(47, 53, 66, 0.16);
+        --subtle-fill: rgba(47, 53, 66, 0.04);
+        --stroke-tint: rgba(47, 53, 66, 0.75);
+   }
+      @media (prefers-color-scheme: dark) {
+        :root { 
+        --base-surface: #16181d;
+        --primary-ink: #e4e7eb;
+        --secondary-ink: #9aa2b1;
+        --sole-accent: #9cb4cd;
+        --subtle-border: rgba(228, 231, 235, 0.16);
+        --subtle-fill: rgba(228, 231, 235, 0.05);
+        --stroke-tint: rgba(228, 231, 235, 0.75);
+   }
+      }
+      .card-bg {
+        fill: var(--base-surface);
+        stroke: var(--subtle-border);
+        stroke-width: 1px;
+      }
+      .watermark-circle {
+        fill: none;
+        stroke: var(--subtle-border);
+        stroke-width: 0.8px;
+        opacity: 0.5;
+      }
+      .hero-title {
+        font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "SimSun", "Georgia", "Times New Roman", serif;
+        font-weight: 700;
+        font-size: 54px;
+        letter-spacing: 0.12em;
+        text-anchor: middle;
+        fill: var(--base-surface);
+        stroke: var(--stroke-tint);
+        stroke-width: 1.6px;
+        paint-order: stroke fill;
+      }
+      .hero-subtitle {
+        font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", "SimSun", serif;
+        font-weight: 400;
+        font-size: 15px;
+        letter-spacing: 0.06em;
+        text-anchor: middle;
+        fill: var(--secondary-ink);
+      }
+      .epigraph-text {
+        font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+        font-weight: 400;
+        font-size: 13px;
+        font-style: italic;
+        text-anchor: middle;
+        fill: var(--secondary-ink);
+        letter-spacing: 0.04em;
+      }
+      .hairline-divider {
+        stroke: var(--subtle-border);
+        stroke-width: 0.8px;
+        stroke-dasharray: 4 6;
+      }
+      .accent-dot {
+        fill: var(--sole-accent);
+      }
+    </style>
+  </defs>
+
+  <!-- Background Card -->
+  <rect x="1" y="1" width="894" height="258" rx="6" class="card-bg" />
+
+  <!-- Concentric Watermark Geometry -->
+  <circle cx="448" cy="100" r="140" class="watermark-circle" />
+  <circle cx="448" cy="100" r="180" class="watermark-circle" style="stroke-dasharray: 2 6;" />
+
+  <!-- Accent Geometry Accent -->
+  <circle cx="448" cy="28" r="2.5" class="accent-dot" />
+
+  <!-- Hollow Hero Title -->
+  <text x="448" y="105" class="hero-title">CEDARIC</text>
+
+  <!-- Subtitle -->
+  <text x="448" y="142" class="hero-subtitle">Systems Architect &amp; Computational Typographer</text>
+
+  <!-- Hairline Divider -->
+  <line x1="328" y1="172" x2="568" y2="172" class="hairline-divider" />
+
+  <!-- Epigraph Quote -->
+  <text x="448" y="208" class="epigraph-text">“Just a dull soul in a dull place.”</text>
+  <text x="448" y="228" class="epigraph-text" style="font-size: 11px; font-style: normal; opacity: 0.8;">— Cedaric —</text>
+</svg>
