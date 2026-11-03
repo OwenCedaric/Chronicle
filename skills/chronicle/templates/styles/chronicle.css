@@ -1,0 +1,656 @@
+/**
+ * Chronicle Design System - Core Stylesheet
+ * Positioning: Universal visual and typographic system for immersive reading, long-form content, presentations, and print media.
+ * Strictly adheres to ChronicleDesignSystem.md
+ */
+
+:root {
+  /* Chromatic Austerity: High-Contrast Light Palette */
+  --base-surface: #fbf9f6;
+  --primary-ink: #16181d;
+  --secondary-ink: #464e5f;
+  --sole-accent: #537791;
+  --subtle-border: rgba(22, 24, 29, 0.14);
+  --subtle-fill: rgba(22, 24, 29, 0.04);
+  --stroke-tint: rgba(22, 24, 29, 0.55);
+  --bg-primary: var(--base-surface);
+  --title-stroke: var(--stroke-tint);
+
+  /* Typographic Polarity */
+  --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", SimSun, serif;
+
+  /* Layout Constants */
+  --reading-max-width: 896px;
+  --dialogue-max-width: 608px;
+  --dual-col-max-width: 384px;
+  --safe-padding-x: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --base-surface: #121418;
+    --primary-ink: #e8ecf1;
+    --secondary-ink: #a3abb8;
+    --sole-accent: #9cb4cd;
+    --subtle-border: rgba(232, 236, 241, 0.16);
+    --subtle-fill: rgba(232, 236, 241, 0.05);
+    --stroke-tint: rgba(232, 236, 241, 0.55);
+  }
+}
+
+:root[data-theme="dark"] {
+  --base-surface: #121418;
+  --primary-ink: #e8ecf1;
+  --secondary-ink: #a3abb8;
+  --sole-accent: #9cb4cd;
+  --subtle-border: rgba(232, 236, 241, 0.16);
+  --subtle-fill: rgba(232, 236, 241, 0.05);
+  --stroke-tint: rgba(232, 236, 241, 0.55);
+}
+
+/* Base Reset & Reading Canvas */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--base-surface);
+  color: var(--primary-ink);
+  font-family: var(--font-body);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--base-surface);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: var(--sole-accent);
+  color: var(--base-surface);
+}
+
+/* Macro Layout & Safe Zones */
+.chronicle-container {
+  width: 100%;
+  max-width: var(--reading-max-width);
+  margin: 0 auto;
+  padding-left: var(--safe-padding-x);
+  padding-right: var(--safe-padding-x);
+  padding-top: 64px;
+  padding-bottom: 160px; /* Terminal overscroll on desktop */
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .chronicle-container {
+    padding-top: 40px;
+    padding-bottom: 96px; /* Terminal overscroll on mobile */
+  }
+}
+
+/* 1.2 Fluid Typography & Hard Constraints */
+
+/* Narrative Paragraphs: 400 Regular for optimal clarity, locked at 1.85 line-height, flush-left */
+.chronicle-prose p,
+p.chronicle-p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: clamp(16px, 0.4vw + 15px, 18px);
+  line-height: 1.85;
+  color: var(--primary-ink);
+  text-align: left; /* Justify is strictly forbidden! */
+  margin-bottom: calc(1.75 * 1em);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Headings: Typographic Polarity - CJK Serif for weight & emphasis */
+h1, .chronicle-h1 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(28px, 2.5vw + 20px, 40px);
+  line-height: 1.15;
+  color: var(--primary-ink);
+  text-align: left;
+  margin-top: 2em;
+  margin-bottom: 0.8em;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  word-break: normal;
+}
+
+h2, .chronicle-h2 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(22px, 1.5vw + 16px, 26px);
+  line-height: 1.35;
+  color: var(--primary-ink);
+  text-align: left;
+  margin-top: calc(3 * 1.85 * 0.7em);
+  margin-bottom: calc(1 * 1.85 * 0.7em);
+  text-wrap: balance;
+  word-break: normal;
+}
+
+h3, .chronicle-h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(18px, 0.8vw + 15px, 20px);
+  line-height: 1.4;
+  color: var(--primary-ink);
+  text-align: left;
+  margin-top: calc(2.5 * 1.4em);
+  margin-bottom: 0.8em;
+  text-wrap: balance;
+  word-break: normal;
+}
+
+/* Lists */
+.chronicle-prose ul,
+.chronicle-prose ol {
+  margin-left: 1.5em;
+  margin-bottom: calc(1.75 * 1em);
+  color: var(--primary-ink);
+}
+
+.chronicle-prose li {
+  font-weight: 300;
+  font-size: clamp(16px, 0.4vw + 15px, 18px);
+  line-height: 1.85;
+  margin-bottom: 0.5em;
+  text-align: left;
+}
+
+/* Links */
+.chronicle-prose a {
+  color: var(--primary-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--subtle-border);
+  text-underline-offset: 4px;
+  transition: text-decoration-color 0.15s ease-in-out;
+}
+
+.chronicle-prose a:hover {
+  text-decoration-color: var(--sole-accent);
+}
+
+/* Blockquote Default */
+.chronicle-prose blockquote {
+  border-left: 2px solid var(--subtle-border);
+  padding-left: 20px;
+  margin: calc(1.75 * 1em) 0;
+  color: var(--secondary-ink);
+}
+
+/* 2.2 Inline Semantics */
+.keyword, mark.keyword {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--sole-accent);
+  background: none; /* Never use accent as background block fill */
+}
+
+.dimmed {
+  color: var(--secondary-ink);
+  font-weight: 600;
+}
+
+.inline-dialogue {
+  color: var(--secondary-ink);
+}
+
+del, s, .strikethrough {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* Code & Preformatted Blocks */
+pre {
+  background-color: var(--subtle-fill);
+  border: 1px solid var(--subtle-border);
+  border-radius: 4px;
+  padding: 20px 24px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--primary-ink);
+  white-space: pre;
+  overflow-x: auto;
+  margin: calc(1.75 * 1em) 0;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background-color: var(--subtle-fill);
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--subtle-border);
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* 2.4 Epigraph: Standalone typographic pause */
+.chronicle-epigraph {
+  text-align: center;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(16px, 0.4vw + 15px, 18px); /* Base body tier */
+  line-height: 1.85;
+  color: var(--secondary-ink);
+  margin: min(80px, 12vh) auto;
+  max-width: 640px;
+  padding: 0 16px;
+}
+
+.chronicle-epigraph .epigraph-source {
+  display: block;
+  font-style: normal;
+  font-size: 14px;
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+}
+
+/* 2.3 Section Break */
+.chronicle-section-break {
+  margin: 96px 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chronicle-section-break::before,
+.chronicle-section-break::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dashed var(--subtle-border);
+}
+
+.chronicle-section-break-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(28px, 2vw + 18px, 40px);
+  color: var(--primary-ink);
+  padding: 0 32px;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 0 8px var(--base-surface), 0 0 12px var(--base-surface), 0 0 16px var(--base-surface);
+  white-space: nowrap;
+}
+
+.chronicle-section-break-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-serif);
+  font-size: clamp(80px, 20vw, 180px);
+  color: var(--primary-ink);
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .chronicle-section-break {
+    margin: 64px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Micro-screen: dashed lines hidden completely */
+  .chronicle-section-break::before,
+  .chronicle-section-break::after {
+    display: none;
+  }
+  .chronicle-section-break-title {
+    padding: 0;
+  }
+}
+
+/* 2.5 Structured Chat Box */
+.chronicle-chat-box {
+  max-width: var(--dialogue-max-width);
+  margin: 48px auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chronicle-chat-box::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: var(--subtle-border);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.chronicle-chat-message {
+  position: relative;
+  z-index: 1;
+  max-width: 85%;
+  padding: 16px 20px;
+  font-size: 15px;
+  line-height: 1.7;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  transition: transform 0.15s ease-in-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chronicle-chat-message:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.chronicle-chat-left {
+  align-self: flex-start;
+  background-color: var(--base-surface);
+  border: 1px solid var(--subtle-border);
+  border-top-left-radius: 2px;
+  border-top-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  color: var(--primary-ink);
+}
+
+.chronicle-chat-right {
+  align-self: flex-end;
+  background-color: var(--subtle-fill);
+  border: none;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 2px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  color: var(--primary-ink);
+}
+
+.chronicle-chat-speaker {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--secondary-ink);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .chronicle-chat-box::before {
+    display: none; /* Central axis vanishes on mobile */
+  }
+  .chronicle-chat-box {
+    gap: 16px;
+  }
+  .chronicle-chat-message {
+    max-width: 90%;
+  }
+}
+
+/* 2.7 Hero Frame & Hollow Stroke Title */
+.chronicle-hero {
+  text-align: center;
+  position: relative;
+  padding: 64px 0 80px;
+  margin-bottom: 48px;
+}
+
+.chronicle-hero-bg-anchor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(80vmin, 600px);
+  height: min(80vmin, 600px);
+  border: 1px solid var(--subtle-border);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chronicle-hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.chronicle-hero-hollow {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 8vw, 84px);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--bg-primary);
+  -webkit-text-stroke: 1px var(--title-stroke);
+  -webkit-text-fill-color: var(--bg-primary);
+  paint-order: stroke fill;
+  letter-spacing: 0.02em;
+  margin-bottom: 16px;
+  user-select: none;
+}
+
+.chronicle-hero-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(16px, 1.5vw + 12px, 20px);
+  color: var(--secondary-ink);
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+
+.chronicle-hero-meta {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--secondary-ink);
+  letter-spacing: 0.08em;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* 2.9 Dual-Column Layout */
+.chronicle-dual-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin: 48px 0;
+}
+
+.chronicle-dual-column > div {
+  max-width: var(--dual-col-max-width);
+}
+
+@media (max-width: 768px) {
+  .chronicle-dual-column {
+    grid-template-columns: 1fr;
+    gap: calc(1.75 * 1em);
+  }
+  .chronicle-dual-column > div {
+    max-width: 100%;
+  }
+}
+
+/* 2.8 Terminal Coda */
+.chronicle-coda {
+  margin-top: 96px;
+  padding-top: 48px;
+  text-align: center;
+  position: relative;
+}
+
+.chronicle-coda-frame {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  color: var(--secondary-ink);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.chronicle-coda-anchor {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 10vw, 96px);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--bg-primary);
+  -webkit-text-stroke: 1px var(--title-stroke);
+  -webkit-text-fill-color: var(--bg-primary);
+  paint-order: stroke fill;
+  margin: 24px 0;
+  user-select: none;
+}
+
+/* 2.10 Images & Media */
+.chronicle-figure {
+  margin: 48px 0;
+  text-align: center;
+}
+
+.chronicle-figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 2px;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease-in-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chronicle-figure img:hover {
+    filter: grayscale(0%);
+  }
+}
+
+.chronicle-figure figcaption {
+  font-size: 13px;
+  color: var(--secondary-ink);
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+}
+
+/* Aspect Ratio Card Framing Mode */
+html.aspect-card,
+body.aspect-card {
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--base-surface);
+}
+
+body.aspect-card .chronicle-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+body.aspect-card .chronicle-hero {
+  padding: 16px 0;
+  margin-bottom: 16px;
+}
+
+body.aspect-card .chronicle-hero-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--primary-ink);
+  letter-spacing: -0.01em;
+}
+
+body.aspect-card .chronicle-hero-hollow {
+  /* On compact cards, ensure high-contrast solid mass */
+  color: var(--primary-ink);
+  -webkit-text-stroke: 0;
+  -webkit-text-fill-color: var(--primary-ink);
+}
+
+body.aspect-card .chronicle-p,
+body.aspect-card p {
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+body.aspect-card .chronicle-hero-bg-anchor {
+  width: min(70vmin, 480px);
+  height: min(70vmin, 480px);
+}
+
+body.aspect-card .chronicle-section-break {
+  margin: 36px 0;
+}
+
+body.aspect-card .chronicle-epigraph {
+  margin: 24px auto;
+}
+
+body.aspect-card .chronicle-chat-box {
+  margin: 24px auto;
+}
+
+body.aspect-card .chronicle-coda {
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+body.aspect-card .chronicle-coda-anchor {
+  margin: 12px 0;
+  font-size: clamp(36px, 6vmin, 64px);
+}
+
+/* Print Rules (@media print) */
+@media print {
+  @page {
+    size: A4;
+    margin: 20mm;
+  }
+  body, html {
+    background: #ffffff !important;
+    color: #3d4451 !important;
+  }
+  .chronicle-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  h1, h2, h3, .chronicle-h1, .chronicle-h2, .chronicle-h3 {
+    break-after: avoid-page !important;
+    page-break-after: avoid !important;
+  }
+  p, .chronicle-p {
+    orphans: 3;
+    widows: 3;
+  }
+  .chronicle-section-break,
+  .chronicle-epigraph,
+  .chronicle-chat-box,
+  .chronicle-dual-column,
+  .chronicle-figure,
+  .chronicle-coda {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .chronicle-hero-bg-anchor {
+    display: none;
+  }
+}

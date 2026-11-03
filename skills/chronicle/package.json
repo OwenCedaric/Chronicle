@@ -1,0 +1,21 @@
+{
+  "name": "chronicle",
+  "version": "0.1.0",
+  "description": "Chronicle Design System Skill for AI Agents",
+  "type": "module",
+  "scripts": {
+    "render": "node scripts/render.mjs",
+    "export": "node scripts/export.mjs",
+    "lint": "node scripts/lint.mjs",
+    "deliver": "node scripts/deliver.mjs",
+    "favicon": "node scripts/favicon.mjs",
+    "profile": "node scripts/profile.mjs"
+  },
+  "dependencies": {
+    "marked": "^15.0.7",
+    "puppeteer-core": "^24.3.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

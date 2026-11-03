@@ -1,0 +1,24 @@
+{
+  "name": "chronicle-design",
+  "version": "0.1.0",
+  "description": "A universal visual and typographic design system skill engineered for long-form reading, social cards, presentations, and print media.",
+  "type": "module",
+  "scripts": {
+    "render": "node skills/chronicle/scripts/render.mjs",
+    "export": "node skills/chronicle/scripts/export.mjs",
+    "lint": "node skills/chronicle/scripts/lint.mjs",
+    "deliver": "node skills/chronicle/scripts/deliver.mjs",
+    "favicon": "node skills/chronicle/scripts/favicon.mjs",
+    "profile": "node skills/chronicle/scripts/profile.mjs",
+    "demos": "node skills/chronicle/scripts/deliver.mjs examples/sample.md --out-dir site/demos && node skills/chronicle/scripts/deliver.mjs examples/social-card-sample.md --aspect all --out-dir site/demos && node skills/chronicle/scripts/deliver.mjs examples/slides-sample.md --format slides --out-dir site/demos && node skills/chronicle/scripts/deliver.mjs examples/resume-sample.md --format resume --out-dir site/demos",
+    "serve": "npx serve site"
+  },
+  "dependencies": {
+    "marked": "^15.0.7",
+    "puppeteer-core": "^24.3.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "private": true
+}

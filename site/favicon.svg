@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <style>
+      :root {
+        --badge-fill: #16181d;
+        --glyph-fill: #fbf9f6;
+        --border-stroke: rgba(22, 24, 29, 0.16);
+        --accent: #537791;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --badge-fill: #202530;
+          --glyph-fill: #f0f2f5;
+          --border-stroke: rgba(240, 242, 245, 0.28);
+          --accent: #9cb4cd;
+        }
+      }
+      .badge-bg {
+        fill: var(--badge-fill);
+      }
+      .badge-border {
+        fill: none;
+        stroke: var(--border-stroke);
+        stroke-width: 1.5;
+      }
+      .glyph-text {
+        font-family: "Georgia", "Times New Roman", "Noto Serif SC", serif;
+        font-weight: 700;
+        font-size: 40px;
+        text-anchor: middle;
+        fill: var(--glyph-fill);
+        letter-spacing: -0.02em;
+      }
+    </style>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="14" class="badge-bg" /><rect x="4" y="4" width="56" height="56" rx="14" class="badge-border" />
+  <text x="32" y="46" class="glyph-text">C</text>
+</svg>

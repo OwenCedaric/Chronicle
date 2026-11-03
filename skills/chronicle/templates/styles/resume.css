@@ -1,0 +1,241 @@
+/**
+ * Chronicle Design System - Resume Stylesheet
+ * Strictly adheres to ChronicleDesignSystem.md Section 3:
+ * - Base Surface maps to pure white (#ffffff).
+ * - Subtle Fill maps to pale gray (#f5f5f5).
+ * - Accent color (#82a1b9) remains.
+ * - Line-height minimum is 1.7.
+ * - Spacious layout strictly preferred over compressed single-page.
+ * - No software drop shadows.
+ */
+
+:root {
+  --base-surface: #ffffff;
+  --primary-ink: #111827;
+  --secondary-ink: #4b5563;
+  --sole-accent: #537791;
+  --subtle-border: rgba(17, 24, 39, 0.12);
+  --subtle-fill: #f3f4f6;
+  --stroke-tint: rgba(17, 24, 39, 0.55);
+
+  --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", SimSun, serif;
+
+  --resume-max-width: 800px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: #f7f7f7;
+  color: var(--primary-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: #f7f7f7;
+  min-height: 100vh;
+  padding: 48px 16px;
+}
+
+/* Resume Document Sheet (A4 Proportion on Screen) */
+.chronicle-resume-sheet {
+  max-width: var(--resume-max-width);
+  margin: 0 auto;
+  background-color: var(--base-surface);
+  padding: 56px 64px 72px;
+  border: 1px solid var(--subtle-border);
+  box-sizing: border-box;
+}
+
+/* Header */
+.resume-header {
+  border-bottom: 1px solid var(--subtle-border);
+  padding-bottom: 28px;
+  margin-bottom: 36px;
+}
+
+.resume-name {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.15;
+  color: var(--primary-ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.resume-headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--secondary-ink);
+  margin-bottom: 16px;
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  font-size: 13px;
+  color: var(--secondary-ink);
+}
+
+.resume-contact span,
+.resume-contact a {
+  color: var(--secondary-ink);
+  text-decoration: none;
+}
+
+.resume-contact a:hover {
+  color: var(--sole-accent);
+}
+
+/* Section Structure */
+.resume-section {
+  margin-bottom: 36px;
+}
+
+.resume-section-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--primary-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--subtle-border);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.resume-section-title::after {
+  content: "";
+  height: 2px;
+  width: 24px;
+  background-color: var(--sole-accent);
+  display: inline-block;
+}
+
+/* Experience / Project Entry */
+.resume-item {
+  margin-bottom: 24px;
+}
+
+.resume-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.resume-item-role {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--primary-ink);
+}
+
+.resume-item-company {
+  font-weight: 500;
+  color: var(--secondary-ink);
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.resume-item-date {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--secondary-ink);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+/* Descriptions & Bullets: 400 Regular with cohesive 1.55 line-height */
+.resume-item p {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--primary-ink);
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.resume-item ul {
+  margin-left: 1.2em;
+  margin-bottom: 6px;
+}
+
+.resume-item li {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--primary-ink);
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+/* Skill Tags / Badges in Subtle Fill */
+.resume-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.resume-skill-tag {
+  background-color: var(--subtle-fill);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  color: var(--primary-ink);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+
+.resume-skill-tag strong {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--primary-ink);
+  margin-right: 4px;
+}
+
+/* Two-Page Deliberate Page Break */
+.resume-page-break {
+  page-break-before: always;
+  break-before: page;
+  margin-top: 48px;
+  padding-top: 24px;
+}
+
+/* Print Rules (@media print): 1:1 Vector A4 Document */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 20mm;
+  }
+  html, body {
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+  .chronicle-resume-sheet {
+    max-width: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .resume-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .resume-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>林简 (Jian Lin) - 简历</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cstyle%3E:root%7B--bg:%23fbf9f6;--st:%233d4451;%7D@media(prefers-color-scheme:dark)%7B:root%7B--bg:%231c1f26;--st:%23d2d6dd;%7D%7D.b%7Bfill:var(--bg);stroke:var(--st);stroke-width:1.2;%7D.t%7Bfont-family:serif;font-weight:700;font-size:34px;text-anchor:middle;fill:var(--bg);stroke:var(--st);stroke-width:1.2px;paint-order:stroke fill;%7D%3C/style%3E%3Ccircle cx='32' cy='32' r='30' class='b'/%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='var(--st)' stroke-width='0.5' opacity='0.25'/%3E%3Ctext x='32' y='44' class='t'%3EC%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+/**
+ * Chronicle Design System - Resume Stylesheet
+ * Strictly adheres to ChronicleDesignSystem.md Section 3:
+ * - Base Surface maps to pure white (#ffffff).
+ * - Subtle Fill maps to pale gray (#f5f5f5).
+ * - Accent color (#82a1b9) remains.
+ * - Line-height minimum is 1.7.
+ * - Spacious layout strictly preferred over compressed single-page.
+ * - No software drop shadows.
+ */
+
+:root {
+  --base-surface: #ffffff;
+  --primary-ink: #111827;
+  --secondary-ink: #4b5563;
+  --sole-accent: #537791;
+  --subtle-border: rgba(17, 24, 39, 0.12);
+  --subtle-fill: #f3f4f6;
+  --stroke-tint: rgba(17, 24, 39, 0.55);
+
+  --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", SimSun, serif;
+
+  --resume-max-width: 800px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: #f7f7f7;
+  color: var(--primary-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: #f7f7f7;
+  min-height: 100vh;
+  padding: 48px 16px;
+}
+
+/* Resume Document Sheet (A4 Proportion on Screen) */
+.chronicle-resume-sheet {
+  max-width: var(--resume-max-width);
+  margin: 0 auto;
+  background-color: var(--base-surface);
+  padding: 56px 64px 72px;
+  border: 1px solid var(--subtle-border);
+  box-sizing: border-box;
+}
+
+/* Header */
+.resume-header {
+  border-bottom: 1px solid var(--subtle-border);
+  padding-bottom: 28px;
+  margin-bottom: 36px;
+}
+
+.resume-name {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.15;
+  color: var(--primary-ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.resume-headline {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--secondary-ink);
+  margin-bottom: 16px;
+}
+
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  font-size: 13px;
+  color: var(--secondary-ink);
+}
+
+.resume-contact span,
+.resume-contact a {
+  color: var(--secondary-ink);
+  text-decoration: none;
+}
+
+.resume-contact a:hover {
+  color: var(--sole-accent);
+}
+
+/* Section Structure */
+.resume-section {
+  margin-bottom: 36px;
+}
+
+.resume-section-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.3;
+  color: var(--primary-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--subtle-border);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.resume-section-title::after {
+  content: "";
+  height: 2px;
+  width: 24px;
+  background-color: var(--sole-accent);
+  display: inline-block;
+}
+
+/* Experience / Project Entry */
+.resume-item {
+  margin-bottom: 24px;
+}
+
+.resume-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.resume-item-role {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--primary-ink);
+}
+
+.resume-item-company {
+  font-weight: 500;
+  color: var(--secondary-ink);
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.resume-item-date {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--secondary-ink);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+/* Descriptions & Bullets: 400 Regular with cohesive 1.55 line-height */
+.resume-item p {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--primary-ink);
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.resume-item ul {
+  margin-left: 1.2em;
+  margin-bottom: 6px;
+}
+
+.resume-item li {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--primary-ink);
+  margin-bottom: 4px;
+  text-align: left;
+}
+
+/* Skill Tags / Badges in Subtle Fill */
+.resume-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.resume-skill-tag {
+  background-color: var(--subtle-fill);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  color: var(--primary-ink);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+
+.resume-skill-tag strong {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--primary-ink);
+  margin-right: 4px;
+}
+
+/* Two-Page Deliberate Page Break */
+.resume-page-break {
+  page-break-before: always;
+  break-before: page;
+  margin-top: 48px;
+  padding-top: 24px;
+}
+
+/* Print Rules (@media print): 1:1 Vector A4 Document */
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm 20mm;
+  }
+  html, body {
+    background: #ffffff !important;
+    padding: 0 !important;
+  }
+  .chronicle-resume-sheet {
+    max-width: 100% !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  .resume-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .resume-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="chronicle-resume-sheet">
+
+  <header class="resume-header">
+    <h1 class="resume-name">林简 (Jian Lin)</h1>
+    <div class="resume-headline">资深系统架构师 / 设计系统工程师</div>
+    <div class="resume-contact">
+      <span>Email: <a href="mailto:jian.lin@chronicle.design">jian.lin@chronicle.design</a></span>
+      <span>Tel: +86 138-0123-4567</span>
+      <span>Loc: 上海 / 远程</span>
+      <span>GitHub: <a href="https://github.com/jianlin" target="_blank">github.com/jianlin</a></span>
+      <span>Web: <a href="https://chronicle.design" target="_blank">chronicle.design</a></span>
+    </div>
+  </header>
+<section class="resume-section"><h2 class="resume-section-title">个人简介</h2>
+<p>软件研发与系统架构经历，专注于前端架构、文档生成流水线与设计系统工程化。注重排版规范与自动化校验结合，探索跨媒介一致性输出。</p>
+</section>
+<section class="resume-section"><h2 class="resume-section-title">工作经历</h2>
+
+        <div class="resume-item-header">
+          <div><span class="resume-item-role">首席架构师</span> <span class="resume-item-company">/ 前沿数字工坊</span></div>
+        </div>
+<p><em>2022.03 - 至今</em></p>
+<ul>
+<li>主导自包含文档生成流水线，统一 Web、PDF、Slides 多端设计 Token。</li>
+<li>研发基于无头浏览器的确定性渲染与守门引擎，将多端渲染一致性提升至 99.8%。</li>
+<li>指导核心架构团队，沉淀 30+ 模块化排版组件，并在全公司推广排版范式。</li>
+</ul>
+
+        <div class="resume-item-header">
+          <div><span class="resume-item-role">高级前端架构师</span> <span class="resume-item-company">/ 栖云科技</span></div>
+        </div>
+<p><em>2018.06 - 2022.02</em></p>
+<ul>
+<li>负责超大规模协作编辑器的底层排版内核研发，攻克 CJK 中英混排与断字排版难题。</li>
+<li>构建端到端自动化视觉回归测试套件，降低线上排版崩坏事故达 90%。</li>
+<li>设计并落地基于 Web 标准的多渠道导出体系，支持 A4 矢量 PDF 渲染。</li>
+</ul>
+
+        <div class="resume-item-header">
+          <div><span class="resume-item-role">核心研发工程师</span> <span class="resume-item-company">/ 先锋云创</span></div>
+        </div>
+<p><em>2015.07 - 2018.05</em></p>
+<ul>
+<li>参与高性能富文本解析引擎开发，负责 AST 语法树转换与样式编译器。</li>
+<li>主导跨端排版性能优化，首屏渲染耗时缩减 45%。</li>
+</ul>
+</section>
+<section class="resume-section"><h2 class="resume-section-title">核心项目</h2>
+<div class="resume-item-header"><span class="resume-item-role">Chronicle Design Engine</span></div>
+<p><em>主导设计与实现 · 2026</em></p>
+<ul>
+<li>架构基于 Node.js 与 Chromium 管道的设计系统技能包。</li>
+<li>实现针对排版约束的静态 AST 质量门禁，杜绝两端对齐、色相污染与行高塌陷。</li>
+<li>支持单页长文、16:9 幻灯片与个人简历三种形态编译与导出。</li>
+</ul>
+</section>
+<section class="resume-section"><h2 class="resume-section-title">技能与专长</h2>
+<ul>
+<li><strong>架构与语言</strong>: TypeScript, Node.js (ESM), JavaScript, CSS Paged Media, Python</li>
+<li><strong>工程化与质量</strong>: Playwright, Puppeteer, AST 解析与编译器, 视觉回归测试, CI/CD</li>
+<li><strong>排版与设计</strong>: Chronicle Token System, 中英排版规范 (Pangu), 字体度量, 印刷排版</li>
+</ul>
+</section>
+<section class="resume-section"><h2 class="resume-section-title">教育背景</h2>
+
+        <div class="resume-item-header">
+          <div><span class="resume-item-role">计算机科学与技术 · 硕士</span> <span class="resume-item-company">/ 浙江大学</span></div>
+        </div>
+<p><em>2012.09 - 2015.06</em></p>
+</section>
+  </div>
+</body>
+</html>

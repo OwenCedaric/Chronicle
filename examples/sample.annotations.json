@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "title": "留白与极性",
+    "subtitle": "论阅读中的视觉休止与排版秩序",
+    "author": "Chronicle Lab",
+    "date": "2026.11",
+    "theme": "light",
+    "coda": true,
+    "coda_char": "閱"
+  },
+  "upgrades": [
+    {
+      "type": "epigraph",
+      "target": "文字的重量，从不在于它占据了多少像素，而在于它被多少空白所温柔托起。"
+    },
+    {
+      "type": "section_break",
+      "target": "极性与秩序",
+      "data": {
+        "watermark": "極"
+      }
+    },
+    {
+      "type": "section_break",
+      "target": "对话与沉思",
+      "data": {
+        "watermark": "問"
+      }
+    },
+    {
+      "type": "chat_box",
+      "target": ":::chat\n- 提问者 (左): \"为什么一定要用高达 1.85 的行高？难道紧凑的排版不能容纳更多内容吗？\"\n- 回答者 (右): \"紧凑容纳的是信息量，而宽裕容纳的是理解力。行距不是字与字的缝隙，而是读者视线在换行时的停机坪。\"\n- 提问者 (左): \"那色彩呢？为什么坚决禁止警告色与彩色点缀？\"\n- 回答者 (右): \"界面必须向内容臣服。当我们只保留一种单一强调色（Sole Accent）时，任何一处高亮才具有穿透心灵的力量。\"\n:::",
+      "data": {
+        "messages": [
+          {
+            "speaker": "left",
+            "name": "提问者",
+            "text": "为什么一定要用高达 1.85 的行高？难道紧凑的排版不能容纳更多内容吗？"
+          },
+          {
+            "speaker": "right",
+            "name": "回答者",
+            "text": "紧凑容纳的是信息量，而宽裕容纳的是理解力。行距不是字与字的缝隙，而是读者视线在换行时的停机坪。"
+          },
+          {
+            "speaker": "left",
+            "name": "提问者",
+            "text": "那色彩呢？为什么坚决禁止警告色与彩色点缀？"
+          },
+          {
+            "speaker": "right",
+            "name": "回答者",
+            "text": "界面必须向内容臣服。当我们只保留一种单一强调色（Sole Accent）时，任何一处高亮才具有穿透心灵的力量。"
+          }
+        ]
+      }
+    },
+    {
+      "type": "section_break",
+      "target": "空间与结构的并置",
+      "data": {
+        "watermark": "空"
+      }
+    },
+    {
+      "type": "dual_column",
+      "target": ":::dual\n[传统密排设计]\n- 追求单屏信息最大化\n- 采用 1.4 至 1.5 拥挤行高\n- 依赖五彩斑斓的标签区分层级\n- 强行两端对齐造成河流效应\n\n[Chronicle 排版]\n- 恪守核心阅读区 896px 视野上限\n- 锁定 1.85 宽松叙事行高\n- 单一强调色与灰度阴翳\n- 永恒坚守左对齐与中英盘古留白\n:::",
+      "data": {
+        "left": "#### 传统密排设计\n\n- 追求单屏信息最大化\n- 采用 1.4 至 1.5 拥挤行高\n- 依赖五彩斑斓的标签区分层级\n- 强行两端对齐造成河流效应",
+        "right": "#### Chronicle 排版\n\n- 恪守核心阅读区 896px 视野上限\n- 锁定 1.85 宽松叙事行高\n- 单一强调色与灰度阴翳\n- 永恒坚守左对齐与中英盘古留白"
+      }
+    },
+    {
+      "type": "coda",
+      "data": {
+        "framing_top": "CHRONICLE LAB",
+        "focal_char": "閱",
+        "framing_bottom": "AN ESSAY ON TYPOGRAPHY"
+      }
+    }
+  ]
+}

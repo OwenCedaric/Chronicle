@@ -1,0 +1,287 @@
+/**
+ * Chronicle Design System - Slides Stylesheet
+ * Strictly adheres to ChronicleDesignSystem.md Section 3:
+ * - Max 3 colors per slide: Base Surface, Primary Ink, and Sole Accent.
+ * - Background locked to Base Surface.
+ * - No software drop shadows.
+ * - Body text strictly Sans-serif Light (300), line spacing locked at 1.8.
+ * - Aspect Ratio: 16:9.
+ */
+
+:root {
+  --base-surface: #fbf9f6;
+  --primary-ink: #16181d;
+  --secondary-ink: #464e5f;
+  --sole-accent: #537791;
+  --subtle-border: rgba(22, 24, 29, 0.14);
+  --subtle-fill: rgba(22, 24, 29, 0.04);
+  --stroke-tint: rgba(22, 24, 29, 0.55);
+  --bg-primary: var(--base-surface);
+  --title-stroke: var(--stroke-tint);
+
+  --font-body: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", SimSun, serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --base-surface: #121418;
+    --primary-ink: #e8ecf1;
+    --secondary-ink: #a3abb8;
+    --sole-accent: #9cb4cd;
+    --subtle-border: rgba(232, 236, 241, 0.16);
+    --subtle-fill: rgba(232, 236, 241, 0.05);
+    --stroke-tint: rgba(232, 236, 241, 0.55);
+  }
+}
+
+:root[data-theme="dark"] {
+  --base-surface: #121418;
+  --primary-ink: #e8ecf1;
+  --secondary-ink: #a3abb8;
+  --sole-accent: #9cb4cd;
+  --subtle-border: rgba(232, 236, 241, 0.16);
+  --subtle-fill: rgba(232, 236, 241, 0.05);
+  --stroke-tint: rgba(232, 236, 241, 0.55);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--base-surface);
+  color: var(--primary-ink);
+  font-family: var(--font-body);
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Slide Deck Container */
+.chronicle-deck {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Single Slide Canvas (16:9 Aspect Ratio) */
+.chronicle-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 8vmin 12vmin;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--base-surface);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.chronicle-slide.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Typography Constraints */
+.chronicle-slide p,
+.chronicle-slide li {
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.8; /* Locked at 1.8 */
+  font-size: clamp(20px, 2vmin, 28px);
+  color: var(--primary-ink);
+  text-align: left;
+  overflow-wrap: break-word;
+}
+
+.chronicle-slide p {
+  margin-bottom: 1.5em;
+}
+
+.chronicle-slide ul,
+.chronicle-slide ol {
+  margin-left: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.chronicle-slide li {
+  margin-bottom: 0.8em;
+}
+
+/* Slide Titles */
+.chronicle-slide h1,
+.chronicle-slide h2 {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--primary-ink);
+  text-align: left;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.8em;
+}
+
+.chronicle-slide h1 {
+  font-size: clamp(36px, 5vmin, 64px);
+  line-height: 1.15;
+}
+
+.chronicle-slide h2 {
+  font-size: clamp(28px, 3.8vmin, 44px);
+  line-height: 1.25;
+}
+
+.chronicle-slide h3 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(22px, 2.8vmin, 32px);
+  line-height: 1.35;
+  margin-bottom: 0.8em;
+  color: var(--primary-ink);
+}
+
+/* Keywords and Accent */
+.chronicle-slide .keyword {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--sole-accent);
+}
+
+/* Slide Variant: Hero / Title Slide */
+.chronicle-slide.slide-hero {
+  text-align: center;
+  align-items: center;
+}
+
+.slide-hero .hero-hollow {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 8vmin, 96px);
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--bg-primary);
+  -webkit-text-stroke: 1.5px var(--title-stroke);
+  -webkit-text-fill-color: var(--bg-primary);
+  paint-order: stroke fill;
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+}
+
+.slide-hero .hero-subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 2.5vmin, 32px);
+  color: var(--secondary-ink);
+  font-weight: 400;
+  margin-bottom: 32px;
+}
+
+.slide-hero .hero-meta {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.8vmin, 20px);
+  color: var(--secondary-ink);
+  letter-spacing: 0.1em;
+  display: flex;
+  gap: 24px;
+}
+
+/* Slide Variant: Statement / Big Epigraph */
+.chronicle-slide.slide-statement {
+  align-items: center;
+  text-align: center;
+}
+
+.slide-statement blockquote {
+  border: none;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(28px, 4vmin, 48px);
+  line-height: 1.6;
+  color: var(--primary-ink);
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.slide-statement .statement-source {
+  display: block;
+  font-style: normal;
+  font-size: clamp(16px, 2vmin, 22px);
+  color: var(--secondary-ink);
+  margin-top: 32px;
+  letter-spacing: 0.1em;
+}
+
+/* Slide Variant: Dual Column */
+.chronicle-slide .slide-dual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8vmin;
+  width: 100%;
+}
+
+/* UI Controls: Slide Navigation Counter & Progress */
+.chronicle-deck-ui {
+  position: fixed;
+  bottom: 24px;
+  right: 32px;
+  font-family: var(--font-serif);
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--secondary-ink);
+  z-index: 100;
+  user-select: none;
+  pointer-events: none;
+}
+
+.chronicle-deck-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: var(--sole-accent);
+  transition: width 0.2s ease;
+  z-index: 101;
+}
+
+/* Print Rules (@media print): 16:9 Landscape PDF Export */
+@media print {
+  @page {
+    size: 16in 9in;
+    margin: 0;
+  }
+  html, body {
+    height: auto !important;
+    overflow: visible !important;
+    background: var(--base-surface) !important;
+  }
+  .chronicle-deck {
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+  .chronicle-slide {
+    position: relative !important;
+    width: 16in !important;
+    height: 9in !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: flex !important;
+    padding: 1in 1.5in !important;
+  }
+  .chronicle-deck-ui,
+  .chronicle-deck-progress {
+    display: none !important;
+  }
+}
