@@ -11,28 +11,11 @@ import { execFileSync } from 'child_process';
 import { resolve, dirname, basename, extname } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import { fileURLToPath } from 'url';
+import { parseArgs } from './cli.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const args = process.argv.slice(2);
-const flags = { outDir: 'output', theme: 'light' };
-const positional = [];
-
-for (let i = 0; i < args.length; i++) {
-  const arg = args[i];
-  if (arg.startsWith('--')) {
-    const key = arg.slice(2);
-    const next = args[i + 1];
-    if (next && !next.startsWith('--')) {
-      flags[key] = next;
-      i++;
-    } else {
-      flags[key] = true;
-    }
-  } else {
-    positional.push(arg);
-  }
-}
+const { flags, positional } = parseArgs({ outDir: 'output', theme: 'light' });
 
 const mdFile = positional[0];
 if (!mdFile || !existsSync(resolve(mdFile))) {

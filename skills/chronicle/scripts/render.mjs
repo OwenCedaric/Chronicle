@@ -14,29 +14,12 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { marked } from 'marked';
 import { spacing } from './pangu.mjs';
+import { parseArgs } from './cli.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // Parse CLI arguments
-const rawArgs = process.argv.slice(2);
-const flags = {};
-const positional = [];
-
-for (let i = 0; i < rawArgs.length; i++) {
-  const arg = rawArgs[i];
-  if (arg.startsWith('--')) {
-    const key = arg.slice(2);
-    const next = rawArgs[i + 1];
-    if (next && !next.startsWith('--')) {
-      flags[key] = next;
-      i++;
-    } else {
-      flags[key] = true;
-    }
-  } else {
-    positional.push(arg);
-  }
-}
+const { flags, positional } = parseArgs();
 
 const mdPath = positional[0];
 const maybeAnnoPath = positional[1];
@@ -467,6 +450,55 @@ if (docFormat === 'slides') {
     blockMap.set(token, html);
     return `\n\n${token}\n\n`;
   }
+
+  // Preprocess :::chat ... ::: container directives
+  contentMd = contentMd.replace(/^:::chat\s*\n([\s\S]*?)\n:::\s*$/gm, (_match, body) => {
+    const messages = [];
+    for (const line of body.split('\n')) {
+      const m = line.match(/^-\s*(.+?)\s*\((左|left|右|right)\)\s*:\s*"(.+)"\s*$/);
+      if (m) {
+        const side = (m[2] === '右' || m[2] === 'right') ? 'right' : 'left';
+        messages.push({ name: m[1].trim(), side, text: m[3] });
+      }
+    }
+    const chatHtml = `
+<div class="chronicle-chat-box">
+  ${messages.map(msg => `
+  <div class="chronicle-chat-message chronicle-chat-${msg.side}">
+    ${msg.name ? `<div class="chronicle-chat-speaker">${msg.name}</div>` : ''}
+    <div class="chronicle-chat-body">${msg.text}</div>
+  </div>`).join('')}
+</div>`;
+    return registerBlock(chatHtml);
+  });
+
+  // Preprocess :::dual ... ::: container directives
+  contentMd = contentMd.replace(/^:::dual\s*\n([\s\S]*?)\n:::\s*$/gm, (_match, body) => {
+    const parts = body.split(/\[([^\]]+)\]/).filter(Boolean);
+    let leftHtml = '';
+    let rightHtml = '';
+    if (parts.length >= 4) {
+      // [Title1] content1 [Title2] content2
+      leftHtml = `<h3>${parts[0]}</h3>${marked.parse(parts[1])}`;
+      rightHtml = `<h3>${parts[2]}</h3>${marked.parse(parts[3])}`;
+    } else if (parts.length >= 2) {
+      // [Title] content (only one titled section, treat rest as second column)
+      leftHtml = `<h3>${parts[0]}</h3>${marked.parse(parts[1])}`;
+      rightHtml = parts.length > 2 ? marked.parse(parts.slice(2).join('')) : '';
+    } else {
+      // No [Title] markers: split content in half
+      const lines = body.trim().split('\n');
+      const mid = Math.ceil(lines.length / 2);
+      leftHtml = marked.parse(lines.slice(0, mid).join('\n'));
+      rightHtml = marked.parse(lines.slice(mid).join('\n'));
+    }
+    const dualHtml = `
+<div class="chronicle-dual-column">
+  <div class="chronicle-dual-col-left">${leftHtml}</div>
+  <div class="chronicle-dual-col-right">${rightHtml}</div>
+</div>`;
+    return registerBlock(dualHtml);
+  });
 
   // Process upgrades
   if (annotations.upgrades && Array.isArray(annotations.upgrades)) {

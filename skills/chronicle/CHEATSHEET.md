@@ -4,13 +4,13 @@ Quick reference for agents producing documents with Chronicle.
 
 ## Tokens & Palette
 
-- **Light Surface**: `#fbf9f6` | **Dark Surface**: `#1c1f26`
-- **Primary Ink**: Light `#3d4451` | Dark `#d2d6dd`
-- **Secondary Ink**: Light `#757d8a` | Dark `#a0a7b4`
-- **Sole Accent**: Light `#82a1b9` | Dark `#9cb4cd` (Keyword / Highlights only, NEVER block background)
-- **Subtle Fill**: 8% Primary Ink (`rgba(61, 68, 81, 0.08)`)
-- **Subtle Border**: 20% Primary Ink (`rgba(61, 68, 81, 0.20)`)
-- **Stroke Tint**: 60% Primary Ink (`rgba(61, 68, 81, 0.60)`)
+- **Light Surface**: `#fbf9f6` | **Dark Surface**: `#121418`
+- **Primary Ink**: Light `#16181d` | Dark `#e8ecf1`
+- **Secondary Ink**: Light `#464e5f` | Dark `#a3abb8`
+- **Sole Accent**: Light `#537791` | Dark `#9cb4cd` (Keyword / Highlights only, NEVER block background)
+- **Subtle Fill**: 4% Primary Ink (`rgba(22, 24, 29, 0.04)`)
+- **Subtle Border**: 14% Primary Ink (`rgba(22, 24, 29, 0.14)`)
+- **Stroke Tint**: 55% Primary Ink (`rgba(22, 24, 29, 0.55)`)
 
 ## Typography Polarity
 

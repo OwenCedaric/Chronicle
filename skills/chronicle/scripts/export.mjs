@@ -14,26 +14,9 @@ import { existsSync, readFileSync } from 'fs';
 import { resolve, basename, dirname, extname } from 'path';
 import { pathToFileURL } from 'url';
 import puppeteer from 'puppeteer-core';
+import { parseArgs } from './cli.mjs';
 
-const args = process.argv.slice(2);
-const flags = { width: null, scale: 2 };
-const positional = [];
-
-for (let i = 0; i < args.length; i++) {
-  const arg = args[i];
-  if (arg.startsWith('--')) {
-    const key = arg.slice(2);
-    const next = args[i + 1];
-    if (next && !next.startsWith('--')) {
-      flags[key] = next;
-      i++;
-    } else {
-      flags[key] = true;
-    }
-  } else {
-    positional.push(arg);
-  }
-}
+const { flags, positional } = parseArgs({ width: null, scale: 2 });
 
 const htmlFile = positional[0];
 if (!htmlFile || (!flags.png && !flags.pdf)) {
@@ -93,12 +76,15 @@ function findChrome() {
   const candidates = [
     process.env.CHROME_PATH,
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary',
     '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    '/opt/homebrew/bin/chromium',
     '/usr/bin/google-chrome',
     '/usr/bin/google-chrome-stable',
     '/usr/bin/chromium',
     '/usr/bin/chromium-browser',
-    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
   ].filter(Boolean);
 
   for (const c of candidates) {

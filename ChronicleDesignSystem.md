@@ -19,13 +19,13 @@
 
 **Core Narrative Palette (HEX Reference):**
 
-- **Base Surface:** Light `#fbf9f6` | Dark `#1c1f26`. *(Page background, left chat bubble fill).*
-- **Primary Ink:** Light `#3d4451` | Dark `#d2d6dd`. *(Body paragraphs, headings, right chat bubble).*
-- **Secondary Ink:** Light `#757d8a` | Dark `#a0a7b4`. *(Captions, dimmed modifiers, inline quotes).*
-- **Sole Accent:** Light `#82a1b9` | Dark `#9cb4cd`. *(Highlighted keywords, text selection background, progress fills. **Never use as a background block fill.**)*
-- **Subtle Border:** 20% Opacity of Primary Ink. *(Hairline dividers, watermark icons).*
-- **Subtle Fill:** 8% Opacity of Primary Ink. *(Right chat bubble, inset blocks).*
-- **Stroke Tint:** 60% Opacity of Primary Ink. *(Outer outline for hollow display text).*
+- **Base Surface:** Light `#fbf9f6` | Dark `#121418`. *(Page background, left chat bubble fill).*
+- **Primary Ink:** Light `#16181d` | Dark `#e8ecf1`. *(Body paragraphs, headings, right chat bubble).*
+- **Secondary Ink:** Light `#464e5f` | Dark `#a3abb8`. *(Captions, dimmed modifiers, inline quotes).*
+- **Sole Accent:** Light `#537791` | Dark `#9cb4cd`. *(Highlighted keywords, text selection background, progress fills. **Never use as a background block fill.**)*
+- **Subtle Border:** 14% Opacity of Primary Ink. *(Hairline dividers, watermark icons).*
+- **Subtle Fill:** 4% Opacity of Primary Ink. *(Right chat bubble, inset blocks).*
+- **Stroke Tint:** 55% Opacity of Primary Ink. *(Outer outline for hollow display text).*
 
 **UI Structural Grays:**  
 Used strictly for system controls decoupled from the reading flow (e.g., floating menus). Floating overlays requiring a blur must use a `12px` Gaussian blur, overlaid with an 80% opacity White (Light) or Dark Gray (Dark) tint.
@@ -189,8 +189,8 @@ Chronicle maintains strict chromatic austerity and typographic polarity across a
 
 1. **Alignment Contamination:** All body text must be Left-Aligned. `Justify` **is strictly forbidden.**
 2. **Chromatic Contamination:** The "Sole Accent" is the ONLY color allowed. Introducing blue, green, red, or yellow warning colors is absolutely prohibited.
-3. **Body Weight Lockdown:** Narrative paragraphs **must always be set to 300 / Light weight**. Weights ≥ 400 are quarantined to UI elements or headings.
-4. **Line-Height Collapse:** The body text line-height ratio **must never drop below 1.85**.
+3. **Body Weight Lockdown:** Narrative paragraphs **must be set to 300 Light or 400 Regular**. Weights ≥ 500 are quarantined to UI elements or headings.
+4. **Line-Height Collapse:** The body text line-height ratio **must never drop below 1.80** (Page), **1.75** (Slides), or **1.50** (Resume).
 5. **Shadow Abuse:** Content containers within the reading flow **must never use physical drop shadows**.
 6. **Visual Field Ceiling:** The maximum width of narrative text **must never exceed 896px**. The text must never touch the screen edge (minimum 24px horizontal safe zone required).
 7. **CJK Formatting:** A space must always separate CJK characters from Latin letters/numerals to prevent visual crowding.

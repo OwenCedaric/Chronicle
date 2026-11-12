@@ -26,12 +26,67 @@ if (html.includes('chronicle-deck')) {
   docFormat = 'resume';
 }
 
+// ---------------------------------------------------------------------------
+// Helpers: extract <style> content and parse CSS rules for structural checks
+// ---------------------------------------------------------------------------
+function extractStyleContent(src) {
+  const blocks = [];
+  const re = /<style[^>]*>([\s\S]*?)<\/style>/gi;
+  let m;
+  while ((m = re.exec(src)) !== null) blocks.push(m[1]);
+  return blocks.join('\n');
+}
+
+/** Simple CSS rule splitter: returns [{selector, body}] (ignores @-rules internals). */
+function parseCssRules(css) {
+  // Strip comments
+  css = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const rules = [];
+  const parts = css.split('}');
+  for (const part of parts) {
+    const braceIdx = part.lastIndexOf('{');
+    if (braceIdx === -1) continue;
+    const selector = part.slice(0, braceIdx).trim();
+    const body = part.slice(braceIdx + 1).trim();
+    if (selector && body) rules.push({ selector, body });
+  }
+  return rules;
+}
+
+/** Check if a selector targets body/paragraph text (NOT headings, titles, metrics, etc.) */
+function isBodySelector(sel, fmt) {
+  const lower = sel.toLowerCase();
+  // Skip heading / structural / accent selectors
+  if (/\bh[1-6]\b/.test(lower)) return false;
+  if (/title|heading|name|metric|seal|badge|label|keyword|hero|coda|speaker|frame/.test(lower)) return false;
+  // Skip card-mode overrides (aspect-card uses intentionally compact line-height)
+  if (/aspect-card/.test(lower)) return false;
+
+  if (fmt === 'page') {
+    return /chronicle-prose/.test(lower) || /chronicle-p/.test(lower) || /chronicle-container/.test(lower);
+  }
+  if (fmt === 'slides') {
+    return /chronicle-slide/.test(lower) && (/\bp\b/.test(lower) || /slide-content/.test(lower) || /slide-statement/.test(lower));
+  }
+  if (fmt === 'resume') {
+    return /resume-text|resume-section|resume-bullet|resume-intro|resume-project/.test(lower);
+  }
+  return false;
+}
+
+const styleContent = extractStyleContent(html);
+const cssRules = parseCssRules(styleContent);
+
+// ===================================================================
 // Constraint 1: Alignment Contamination (NO Justify)
+// ===================================================================
 if (/text-align\s*:\s*justify/i.test(html)) {
   errors.push('Constraint #1 VIOLATION: "text-align: justify" found. Body text must be Left-Aligned (flush-left, ragged-right).');
 }
 
+// ===================================================================
 // Constraint 2: Chromatic Contamination
+// ===================================================================
 const forbiddenColorNames = ['red', 'green', 'yellow', 'orange', 'purple', 'cyan'];
 for (const color of forbiddenColorNames) {
   const regex = new RegExp(`(?:color|background|border)[^:]*:\\s*${color}\\b`, 'i');
@@ -58,55 +113,124 @@ for (const hex of hexMatches) {
   }
 }
 
+// ===================================================================
 // Constraint 3: Body Weight Discipline
-// - Page & Slides: 300 Light or 400 Regular for narrative reading
-// - Resume: 400 Regular for high-readability scanning (weights > 500 reserved for headings/metrics)
-if (docFormat === 'page' && /\.chronicle-prose\s+p[^{]*\{[^}]*font-weight\s*:\s*(?:[5-9]\d\d|bold)/i.test(html)) {
-  errors.push('Constraint #3 VIOLATION: Narrative paragraph weight is > 400. Page body MUST be set to 300 Light or 400 Regular.');
-} else if (docFormat === 'slides' && /\.chronicle-slide\s+p[^{]*\{[^}]*font-weight\s*:\s*(?:[5-9]\d\d|bold)/i.test(html)) {
-  errors.push('Constraint #3 VIOLATION: Slide body paragraph weight is > 400. Slides body MUST be set to 300 Light or 400 Regular.');
-} else if (docFormat === 'resume' && /\.resume-item\s+p[^{]*\{[^}]*font-weight\s*:\s*(?:[6-9]\d\d|bold)/i.test(html)) {
-  errors.push('Constraint #3 VIOLATION: Resume body paragraph weight is > 500. Resume body MUST be set to 400 Regular.');
+// Parses actual CSS rules and checks font-weight on body-text selectors.
+// - Page & Slides: 300 or 400 (violation if >= 500)
+// - Resume: 400 (violation if >= 600, headings/metrics may use 500-700)
+// ===================================================================
+const weightThreshold = docFormat === 'resume' ? 600 : 500;
+for (const rule of cssRules) {
+  if (!isBodySelector(rule.selector, docFormat)) continue;
+  const fwMatch = rule.body.match(/font-weight\s*:\s*(\d+|bold|bolder)/i);
+  if (!fwMatch) continue;
+  const val = fwMatch[1].toLowerCase();
+  const numWeight = val === 'bold' ? 700 : val === 'bolder' ? 700 : parseInt(val, 10);
+  if (!isNaN(numWeight) && numWeight >= weightThreshold) {
+    errors.push(
+      `Constraint #3 VIOLATION: Body selector "${rule.selector.slice(0, 60)}" has font-weight: ${fwMatch[1]}. ` +
+      `${docFormat === 'resume' ? 'Resume body' : 'Narrative body'} must be 300 Light or 400 Regular.`
+    );
+  }
 }
 
+// Also check inline style font-weight on body elements
+const inlineFwMatches = html.matchAll(/<(?:p|li|div)[^>]*style="[^"]*font-weight\s*:\s*(\d+|bold)[^"]*"/gi);
+for (const m of inlineFwMatches) {
+  const val = m[1].toLowerCase();
+  const numWeight = val === 'bold' ? 700 : parseInt(val, 10);
+  if (!isNaN(numWeight) && numWeight >= weightThreshold) {
+    warnings.push(`Constraint #3 ADVISORY: Inline font-weight ${m[1]} found on element. Verify it is not narrative body text.`);
+  }
+}
+
+// ===================================================================
 // Constraint 4: Line-Height Discipline
-// - Page: >= 1.80 for spacious, reflective reading
-// - Slides: 1.80 locked for slide layout
-// - Resume: >= 1.50 for compact, cohesive information density
-if (docFormat === 'page') {
-  const lhMatch = html.match(/\.chronicle-prose\s+p[^{]*\{[^}]*line-height\s*:\s*([0-9.]+)/i);
-  if (lhMatch && parseFloat(lhMatch[1]) < 1.80) {
-    errors.push(`Constraint #4 VIOLATION: Body line-height ratio is ${lhMatch[1]}. Must be >= 1.80.`);
-  }
-} else if (docFormat === 'slides') {
-  const lhMatch = html.match(/\.chronicle-slide\s+p[^{]*\{[^}]*line-height\s*:\s*([0-9.]+)/i);
-  if (lhMatch && parseFloat(lhMatch[1]) < 1.75) {
-    errors.push(`Constraint #4 VIOLATION: Slide line-height ratio is ${lhMatch[1]}. Must be >= 1.75.`);
-  }
-} else if (docFormat === 'resume') {
-  const lhMatch = html.match(/\.resume-item\s+p[^{]*\{[^}]*line-height\s*:\s*([0-9.]+)/i);
-  if (lhMatch && parseFloat(lhMatch[1]) < 1.50) {
-    errors.push(`Constraint #4 VIOLATION: Resume line-height ratio is ${lhMatch[1]}. Must be >= 1.50.`);
+// Parses CSS rules for line-height on body selectors.
+// - Page: >= 1.80
+// - Slides: >= 1.75
+// - Resume: >= 1.50
+// ===================================================================
+const lhFloor = docFormat === 'page' ? 1.80 : docFormat === 'slides' ? 1.75 : 1.50;
+for (const rule of cssRules) {
+  if (!isBodySelector(rule.selector, docFormat)) continue;
+  const lhMatch = rule.body.match(/line-height\s*:\s*([0-9.]+)/i);
+  if (!lhMatch) continue;
+  const lh = parseFloat(lhMatch[1]);
+  if (lh > 0 && lh < lhFloor) {
+    errors.push(
+      `Constraint #4 VIOLATION: Selector "${rule.selector.slice(0, 60)}" has line-height: ${lhMatch[1]}. ` +
+      `${docFormat.charAt(0).toUpperCase() + docFormat.slice(1)} body must be >= ${lhFloor}.`
+    );
   }
 }
 
+// Also check the CSS custom property as a fallback
+const customLhMatch = styleContent.match(/--(?:body-)?line-height\s*:\s*([0-9.]+)/i);
+if (customLhMatch) {
+  const lh = parseFloat(customLhMatch[1]);
+  if (lh > 0 && lh < lhFloor) {
+    errors.push(`Constraint #4 VIOLATION: CSS custom property line-height is ${customLhMatch[1]}. Must be >= ${lhFloor}.`);
+  }
+}
+
+// ===================================================================
 // Constraint 5: Shadow Abuse (No physical drop shadows in reading flow)
+// Checks both box-shadow and filter: drop-shadow()
+// ===================================================================
 const shadowMatches = html.match(/box-shadow\s*:\s*([^;]+);/g) || [];
 for (const sm of shadowMatches) {
+  // Allow the micro-shadow exception (opacity 0.02) and explicit 'none'
   if (!sm.includes('0.02') && !sm.includes('none')) {
-    errors.push(`Constraint #5 VIOLATION: Unauthorized box-shadow found: "${sm}". Drop shadows are forbidden in reading flow.`);
+    errors.push(`Constraint #5 VIOLATION: Unauthorized box-shadow found: "${sm.slice(0, 80)}". Drop shadows are forbidden in reading flow.`);
   }
 }
 
+const dropShadowMatches = html.match(/filter\s*:[^;]*drop-shadow\s*\([^)]+\)/gi) || [];
+for (const ds of dropShadowMatches) {
+  errors.push(`Constraint #5 VIOLATION: Unauthorized filter drop-shadow found: "${ds.slice(0, 80)}". Drop shadows are forbidden in reading flow.`);
+}
+
+// ===================================================================
 // Constraint 6: Visual Field Ceiling (max-width <= 896px for Page)
-if (docFormat === 'page' && /--reading-max-width\s*:\s*(\d+)px/i.test(html)) {
-  const mw = parseInt(html.match(/--reading-max-width\s*:\s*(\d+)px/i)[1], 10);
-  if (mw > 896) {
-    errors.push(`Constraint #6 VIOLATION: Container max-width ${mw}px exceeds 896px ceiling.`);
+// Checks CSS custom property AND inline max-width declarations.
+// ===================================================================
+if (docFormat === 'page') {
+  // Check custom property
+  const mwPropMatch = styleContent.match(/--reading-max-width\s*:\s*(\d+)px/i);
+  if (mwPropMatch) {
+    const mw = parseInt(mwPropMatch[1], 10);
+    if (mw > 896) {
+      errors.push(`Constraint #6 VIOLATION: --reading-max-width is ${mw}px. Must be <= 896px.`);
+    }
+  }
+
+  // Check container rules for explicit max-width overrides
+  for (const rule of cssRules) {
+    const sel = rule.selector.toLowerCase();
+    if (!/chronicle-container|chronicle-prose/.test(sel)) continue;
+    const mwMatch = rule.body.match(/max-width\s*:\s*(\d+)px/i);
+    if (mwMatch) {
+      const mw = parseInt(mwMatch[1], 10);
+      if (mw > 896) {
+        errors.push(`Constraint #6 VIOLATION: Selector "${rule.selector.slice(0, 60)}" sets max-width: ${mw}px. Must be <= 896px.`);
+      }
+    }
+  }
+
+  // Check inline styles on container-like elements
+  const inlineMwMatches = html.matchAll(/<(?:main|div|article|section)[^>]*class="[^"]*(?:chronicle-container|chronicle-prose)[^"]*"[^>]*style="[^"]*max-width\s*:\s*(\d+)px/gi);
+  for (const m of inlineMwMatches) {
+    const mw = parseInt(m[1], 10);
+    if (mw > 896) {
+      errors.push(`Constraint #6 VIOLATION: Inline max-width ${mw}px on container exceeds 896px ceiling.`);
+    }
   }
 }
 
-// Constraint 7: CJK Formatting
+// ===================================================================
+// Constraint 7: CJK Formatting (Pangu spacing)
+// ===================================================================
 const pMatches = html.match(/<(?:p|li)[^>]*>([\s\S]*?)<\/(?:p|li)>/g) || [];
 let panguViolations = 0;
 const CJK = '\\u4e00-\\u9fff';
@@ -121,6 +245,9 @@ if (panguViolations > 0) {
   warnings.push(`Constraint #7 ADVISORY: ${panguViolations} paragraphs contain unspaced CJK-Latin characters. Ensure pangu spacing is applied.`);
 }
 
+// ===================================================================
+// Output Report
+// ===================================================================
 console.log(`\n=== Chronicle Quality Gate Report [${docFormat.toUpperCase()}]: ${file} ===`);
 if (warnings.length > 0) {
   for (const w of warnings) {
